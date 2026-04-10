@@ -17,6 +17,8 @@ The pack focuses on repeated Solana failure modes that show up across public aud
 - state-machine and lifecycle bugs
 - governance, upgrade, oracle, liveness, and wallet-boundary risks
 
+It also distinguishes code-level exploit classes from broader residual risk in governance, wallet, client, phishing, and developer-environment boundaries rather than treating public incident headlines as a pure proxy for on-chain bug density.
+
 ## Installation
 
 ### Quick Install With `npx`
@@ -64,7 +66,10 @@ solana-audit-skill/
 |       |   |-- oracle-pricing-mev.md
 |       |   |-- upgrade-admin-governance.md
 |       |   |-- dos-compute-budget.md
-|       |   `-- client-wallet-ux.md
+|       |   |-- client-wallet-ux.md
+|       |   |-- durable-nonce-governance.md
+|       |   |-- token-2022-transfer-hooks.md
+|       |   `-- zk-proof-soundness.md
 |       `-- reports/
 |           |-- public-audit-corpus.md
 |           |-- notable-incidents.md
@@ -81,9 +86,11 @@ Once installed, Claude Code should trigger this skill for tasks such as:
 - "Audit this Anchor instruction for signer and PDA bugs"
 - "Explain common Solana account validation vulnerabilities from public audits"
 - "Generate a release blocker checklist for this Token-2022 integration"
+- "Review this Token-2022 transfer-hook path for callback and extra-account trust-boundary risks"
 - "Review this Solana program for CPI trust-boundary issues"
 - "Digest this public audit report and map the findings to a normalized taxonomy"
 - "Prepare an audit plan for this governance upgrade path"
+- "Analyze this durable nonce governance flow for delayed-execution admin risk"
 
 ## Audit Posture
 
@@ -106,6 +113,8 @@ The taxonomy and workflows are grounded in public material from:
 - [Sec3 / Soteria blogs and X-Ray vulnerability material](https://www.sec3.dev/blog)
 - [Immunefi bug fix reviews and disclosures](https://immunefi.com/blog/bug-fix-reviews/)
 - [Official Solana Program and Program Security material](https://solana.com/developers/courses/program-security)
+- [Official Solana Foundation security disclosures and ecosystem security material](https://solana.com/news/solana-ecosystem-security)
+- public incident analyses such as BlockSec, Chainalysis, and TRM Labs where they materially clarify the first boundary crossed in a class-defining case
 
 See [`skill/references/resources.md`](skill/references/resources.md) for the full source index used by this pack.
 
