@@ -36,6 +36,18 @@ Solana's durable nonce feature deliberately separates signing time from executio
 4. Admin instructions that do not emit an on-chain event or other monitoring signal for rapid alerting.
 5. Signer workflows that approve nonce-backed transactions without independently decoding the full instruction set and nonce authority.
 
+## Operational red flags
+
+The April 2026 Drift incident showed that durable nonce governance abuse can be preceded by weeks of social engineering and seemingly administrative governance churn. These are review signals, not standalone proof of compromise:
+
+1. timelock removal or abrupt timelock shortening on high-privilege paths
+2. abrupt multisig threshold changes or signer-set rotations close to other admin actions
+3. emergency authority changes or Security Council migrations immediately before a high-impact event
+4. rushed governance migrations that bundle role transfer, threshold reduction, or timelock removal
+5. unusual contributor, signer, or operator churn around multisig or governance operations
+6. acceptance of pre-signed admin transactions without fresh confirmation at execution time
+7. governance paths that materially reduce the time available for human review, cancellation, or nonce invalidation
+
 ## Anchor Notes
 
 1. Anchor does not materially reduce this risk. The vulnerable primitive is the governance workflow around signing and execution, not the account-validation ergonomics inside a single instruction.
@@ -64,5 +76,6 @@ Wallets and multisig signing surfaces often make delayed execution hard to disti
 
 1. [Drift Protocol Incident: Multisig Governance Compromise via Durable Nonce Exploitation](https://blocksec.com/blog/drift-protocol-incident-multisig-governance-compromise-via-durable-nonce-exploitation) - the class-defining public analysis of nonce-backed pre-signing, zero timelock, and admin takeover leading to a $285M drain.
 2. [North Korean Hackers Attack Drift Protocol In USD 285 Million Heist](https://www.trmlabs.com/resources/blog/north-korean-hackers-attack-drift-protocol-in-285-million-heist) - independently reconstructs the multi-week staging, durable nonce preparation, and fake-collateral extraction path.
-3. [Durable & Offline Transaction Signing using Nonces](https://solana.com/nl/developers/guides/advanced/introduction-to-durable-nonces) - the authoritative explanation of why nonce-backed signatures can remain valid for future execution.
-4. [Drift Protocol official statement](https://x.com/DriftProtocol/status/2039564437795836039) - the official project timeline referenced by later incident analyses.
+3. [Drift Protocol Hack: How Privileged Access Led to a $285M Loss](https://www.chainalysis.com/blog/lessons-from-the-drift-hack/) - reconstructs the social-engineering campaign, zero-timelock Security Council migration, and durable-nonce-triggered admin transfer on a concrete timeline.
+4. [Durable & Offline Transaction Signing using Nonces](https://solana.com/nl/developers/guides/advanced/introduction-to-durable-nonces) - the authoritative explanation of why nonce-backed signatures can remain valid for future execution.
+5. [Drift Protocol official statement](https://x.com/DriftProtocol/status/2039564437795836039) - the official project timeline referenced by later incident analyses.

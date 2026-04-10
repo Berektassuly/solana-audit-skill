@@ -51,6 +51,19 @@ This pack is grounded in public primary sources first, then in comparable public
 2. [Raydium Tick Manipulation](https://immunefi.com/blog/bug-fix-reviews/raydium-tick-manipulation-bugfix-review/) - concentrated-liquidity price boundary failure.
 3. [Raydium Liquidity Drain](https://immunefi.com/blog/bug-fix-reviews/raydium-liquidity-drain-bugfix-review/) - pool accounting and LP redemption boundary failure.
 
+## Ecosystem programs and tooling
+
+### Foundation-backed programs
+
+1. [Raising the Bar on Solana Ecosystem Security](https://solana.com/news/solana-ecosystem-security) - official Solana Foundation launch note for STRIDE, SIRN, foundation-backed monitoring, and related ecosystem security services.
+2. [Introducing STRIDE: A Security Program for the Solana Ecosystem](https://blog.asymmetric.re/introducing-stride-a-security-program-for-the-solana-ecosystem/) - Asymmetric Research description of STRIDE's structured evaluation framework, public findings model, and the membership-based SIRN incident-response network.
+
+### Security tooling
+
+1. [Riverguard](https://riverguard.neodyme.io/) - Neodyme service that simulates mutated transactions against deployed Solana programs and stores findings for developer triage; listed by Solana Foundation as an ecosystem security resource.
+2. [Riverguard: Mutation Rules for Finding Vulnerabilities](https://neodyme.io/blog/riverguard_3_fuzzcases/) - technical description of Riverguard's mutated-transaction attack simulation approach and the vulnerability patterns it is designed to surface.
+3. [Introducing the Solana Transaction Security Standard](https://www.range.org/blog/announcing-the-solana-transaction-security-standard) - Range description of real-time risk scoring, pre-execution transaction simulation, and transaction-level alerting for Solana wallets, multisigs, and apps.
+
 ## Comparable public Solana security corpora
 
 These are useful when a category is real but public audit pages are sparse.

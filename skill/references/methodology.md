@@ -65,6 +65,14 @@ Exclude or downgrade:
 3. generic EVM-only taxonomies unless the mechanic clearly matches Solana boundary semantics
 4. categories inferred purely from intuition
 
+## Audit scope versus incident mix
+
+Recent public Solana incident coverage also includes governance social engineering, wallet and client compromise, phishing, and developer-environment compromise, as shown by the [Drift Protocol incident analysis](https://www.chainalysis.com/blog/lessons-from-the-drift-hack/), the [Anza `@solana/web3.js` root cause analysis](https://www.anza.xyz/blog/web3-js-exploit-root-cause-analysis), and [SolPhishHunter](https://arxiv.org/abs/2505.04094).
+
+1. Public loss headlines are not a clean proxy for on-chain bug density.
+2. A code audit can materially reduce exploit risk while leaving operational, governance, wallet, or developer-environment exposure unchanged.
+3. When that broader residual risk dominates, reviewers should call it out explicitly instead of implying the audited code covers the full real-world attack surface.
+
 ## Severity normalization
 
 Severity labels differ across firms. Normalize by outcome:

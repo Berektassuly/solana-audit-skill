@@ -110,3 +110,4 @@ What must be true before you report it:
 1. the protocol accepts arbitrary Token-2022 mints without a hook-program allowlist
 2. state mutation in the host protocol occurs after `transfer_checked` rather than before
 3. `ExtraAccountMetaList` PDA seeds are not validated or can be derived by an attacker
+4. other Token-2022 extensions such as default account state, permanent delegate, or confidential transfer are not the entire basis for a hook-specific finding without a concrete callback or extra-account exploit path

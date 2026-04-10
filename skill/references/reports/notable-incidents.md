@@ -62,11 +62,11 @@ Source: [Anza root cause analysis](https://www.anza.xyz/blog/web3-js-exploit-roo
 
 ## Drift Protocol ($285M, April 2026)
 
-Source: [BlockSec incident analysis](https://blocksec.com/blog/drift-protocol-incident-multisig-governance-compromise-via-durable-nonce-exploitation), [TRM Labs report](https://www.trmlabs.com/resources/blog/north-korean-hackers-attack-drift-protocol-in-285-million-heist), [Drift official statement](https://x.com/DriftProtocol/status/2039564437795836039)
+Source: [BlockSec incident analysis](https://blocksec.com/blog/drift-protocol-incident-multisig-governance-compromise-via-durable-nonce-exploitation), [Chainalysis report](https://www.chainalysis.com/blog/lessons-from-the-drift-hack/), [TRM Labs report](https://www.trmlabs.com/resources/blog/north-korean-hackers-attack-drift-protocol-in-285-million-heist), [Drift official statement](https://x.com/DriftProtocol/status/2039564437795836039)
 
 1. Primary class: [durable-nonce-governance](../taxonomy/durable-nonce-governance.md)
 2. Secondary class: [oracle-pricing-mev](../taxonomy/oracle-pricing-mev.md)
-3. Why it matters: the largest DeFi hack of 2026 was not a smart contract code bug. The exploit combined a Solana-native delayed-execution primitive, social engineering of multisig cosigners, and fake-collateral oracle manipulation after a zero-timelock Security Council migration removed the last intervention window.
+3. Why it matters: the largest DeFi hack of 2026 was not a smart contract code bug. Social engineering and governance-process breakdown collected the needed approvals, but the decisive boundary crossed was durable-nonce-backed governance execution after a zero-timelock Security Council migration removed the last intervention window.
 
 ## ZK ElGamal Phantom Challenge (June 2025, no funds lost)
 
