@@ -19,9 +19,19 @@ The pack focuses on repeated Solana failure modes that show up across public aud
 
 ## Installation
 
-### Quick Install
+### Quick Install With `npx`
 
 ```bash
+npx skills add https://github.com/Berektassuly/solana-audit-skill --skill solana-audit
+```
+
+This is the recommended installation path for Agent Skills-compatible environments.
+
+### Manual Install
+
+```bash
+git clone https://github.com/Berektassuly/solana-audit-skill
+cd solana-audit-skill
 ./install.sh
 ```
 
