@@ -1,0 +1,11 @@
+# Test dependency installs
+tests/node_modules/
+tests/package-lock.json
+
+# Local environment files
+.env
+.env.*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
