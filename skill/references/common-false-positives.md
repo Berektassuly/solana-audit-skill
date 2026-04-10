@@ -84,3 +84,29 @@ What must be true before you report it:
 1. the oracle input is attacker-influenced or stale
 2. the manipulated price reaches mint, borrow, redeem, or liquidation logic
 3. there is no TWAP, confidence bound, or cross-check that blocks the exploit
+
+## 7. Durable nonce presence is not automatically a governance risk
+
+Why it is noisy:
+
+1. durable nonces are legitimately used for offline signing, hardware wallet flows, and scheduled operations
+2. the mere presence of nonce accounts in a protocol is not a vulnerability
+
+What must be true before you report it:
+
+1. an admin or authority instruction accepts pre-signed nonce transactions without independent confirmation
+2. the governance model allows a threshold to be met by pre-signed transactions without a timelock or separate on-chain confirmation step
+3. the nonce account authority is held by fewer parties than the nominal multisig quorum
+
+## 8. Transfer Hook program attachment is not automatically exploitable
+
+Why it is noisy:
+
+1. many legitimate Token-2022 mints use transfer hooks for compliance, royalties, or access control
+2. the hook program itself may be audited and safe
+
+What must be true before you report it:
+
+1. the protocol accepts arbitrary Token-2022 mints without a hook-program allowlist
+2. state mutation in the host protocol occurs after `transfer_checked` rather than before
+3. `ExtraAccountMetaList` PDA seeds are not validated or can be derived by an attacker

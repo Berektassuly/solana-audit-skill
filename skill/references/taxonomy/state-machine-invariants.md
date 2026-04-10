@@ -40,6 +40,19 @@ Protocols often split a user flow across multiple instructions, transactions, an
 2. Re-check critical state after CPIs if the callee can mutate shared state.
 3. Treat "admin can update fees anytime" as a potential business-logic vulnerability, not just a governance note.
 
+## Account Reloading After CPI
+
+Anchor does not automatically refresh deserialized account data after a CPI. If a program reads account state after a CPI that modified that account, it operates on stale data. The pattern is analogous to a cache-consistency bug: the in-memory representation diverges from the on-chain state.
+
+Additionally, `realloc` called multiple times within one transaction with `zero_init: false` on a shrink-then-grow sequence can expose stale memory in the newly reallocated region. This is distinct from a pure business-logic bug; it is a memory-model hazard specific to account resizing and cached state handling.
+
+Review signals:
+
+1. Account data read after `invoke`, `invoke_signed`, or an Anchor CPI helper call without an explicit `.reload()` call.
+2. `realloc` called with `zero_init: false` after a prior shrink in the same transaction.
+
+Sources: [Helius - A Hitchhiker's Guide to Solana Program Security](https://www.helius.dev/blog/a-hitchhikers-guide-to-solana-program-security), [Cantina - Solana Security Risks, Issues & Mitigation Guide](https://cantina.xyz/blog/securing-solana-a-developers-guide), [Beyond the Audit: The Hidden Risks of Upgrading Solana Programs](https://www.linkedin.com/pulse/beyond-audit-hidden-risks-upgrading-solana-programs-tushar-32fqc).
+
 ## Native Rust / Pinocchio Notes
 
 1. Prefer small explicit enums or status bytes over ad hoc boolean combinations.

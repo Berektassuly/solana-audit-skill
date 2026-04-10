@@ -60,6 +60,22 @@ Source: [Anza root cause analysis](https://www.anza.xyz/blog/web3-js-exploit-roo
 1. Primary class: [client-wallet-ux](../taxonomy/client-wallet-ux.md)
 2. Why it matters: Solana security is not only on-chain. The client and signing boundary can be the shortest path to user loss.
 
+## Drift Protocol ($285M, April 2026)
+
+Source: [BlockSec incident analysis](https://blocksec.com/blog/drift-protocol-incident-multisig-governance-compromise-via-durable-nonce-exploitation), [TRM Labs report](https://www.trmlabs.com/resources/blog/north-korean-hackers-attack-drift-protocol-in-285-million-heist), [Drift official statement](https://x.com/DriftProtocol/status/2039564437795836039)
+
+1. Primary class: [durable-nonce-governance](../taxonomy/durable-nonce-governance.md)
+2. Secondary class: [oracle-pricing-mev](../taxonomy/oracle-pricing-mev.md)
+3. Why it matters: the largest DeFi hack of 2026 was not a smart contract code bug. The exploit combined a Solana-native delayed-execution primitive, social engineering of multisig cosigners, and fake-collateral oracle manipulation after a zero-timelock Security Council migration removed the last intervention window.
+
+## ZK ElGamal Phantom Challenge (June 2025, no funds lost)
+
+Source: [zksecurity.xyz post-mortem](https://blog.zksecurity.xyz/posts/solana-phantom-challenge-bug/), [Solana Foundation post mortem, May 2 2025](https://solana.com/ru/news/post-mortem-may-2-2025), [Solana Foundation post mortem, June 25 2025](https://solana.com/news/post-mortem-june-25-2025)
+
+1. Primary class: [zk-proof-soundness](../taxonomy/zk-proof-soundness.md)
+2. Secondary class: [token-integration](../taxonomy/token-integration.md)
+3. Why it matters: a critical soundness bug in a native Solana ZK program would have enabled unlimited minting or full draining of confidential token balances. Responsible disclosure and coordinated validator patching prevented exploitation, proving that ZK verifier programs are not automatically trustworthy security boundaries for higher-level protocol logic.
+
 ## How to use these incidents
 
 1. Start from the primary class.

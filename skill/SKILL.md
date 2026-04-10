@@ -90,6 +90,9 @@ Review the code or incident by canonical class first:
 - admin, governance, and upgrade risk
 - liveness and denial of service
 - client and wallet UX security
+- token-2022 transfer hooks and hook reentrancy
+- durable nonce governance abuse
+- zk proof soundness (for programs integrating Token-2022 confidential transfers)
 
 ### 3. Tie observations to public evidence
 
@@ -157,11 +160,14 @@ Read these references only as needed:
 - PDA seeds and bumps: [references/taxonomy/pda-seeds-bumps.md](references/taxonomy/pda-seeds-bumps.md)
 - CPI trust boundaries: [references/taxonomy/cpi-trust-boundaries.md](references/taxonomy/cpi-trust-boundaries.md)
 - Token integration: [references/taxonomy/token-integration.md](references/taxonomy/token-integration.md)
+- Token-2022 Transfer Hooks: [references/taxonomy/token-2022-transfer-hooks.md](references/taxonomy/token-2022-transfer-hooks.md)
+- ZK Proof Soundness: [references/taxonomy/zk-proof-soundness.md](references/taxonomy/zk-proof-soundness.md)
 - Arithmetic and precision: [references/taxonomy/arithmetic-precision.md](references/taxonomy/arithmetic-precision.md)
 - State-machine invariants: [references/taxonomy/state-machine-invariants.md](references/taxonomy/state-machine-invariants.md)
 - Lifecycle, reinit, close, revival: [references/taxonomy/lifecycle-reinit-close-revival.md](references/taxonomy/lifecycle-reinit-close-revival.md)
 - Duplicate aliasing: [references/taxonomy/duplicate-mutable-aliasing.md](references/taxonomy/duplicate-mutable-aliasing.md)
 - Oracle and MEV: [references/taxonomy/oracle-pricing-mev.md](references/taxonomy/oracle-pricing-mev.md)
 - Upgrade and governance: [references/taxonomy/upgrade-admin-governance.md](references/taxonomy/upgrade-admin-governance.md)
+- Durable Nonce Governance: [references/taxonomy/durable-nonce-governance.md](references/taxonomy/durable-nonce-governance.md)
 - Denial of service and compute: [references/taxonomy/dos-compute-budget.md](references/taxonomy/dos-compute-budget.md)
 - Client and wallet UX: [references/taxonomy/client-wallet-ux.md](references/taxonomy/client-wallet-ux.md)

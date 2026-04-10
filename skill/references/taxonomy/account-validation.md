@@ -42,6 +42,14 @@ Solana callers supply nearly every account explicitly. Code and data are separat
 2. When using `UncheckedAccount`, pair it with explicit owner, discriminator, and relationship constraints.
 3. Use `has_one`, `owner =`, and explicit constraint expressions to bind stored keys to incoming accounts.
 
+## Anchor remaining_accounts
+
+Anchor's `ctx.remaining_accounts` allows instructions to receive a variable number of accounts not declared in the struct. These accounts bypass Anchor's automatic ownership, signer, and type checks entirely. A program that passes `remaining_accounts` to security-sensitive logic without manually validating owner, type, PDA derivation, and relationship invariants is exploitable by injecting malicious accounts.
+
+Review signal: any instruction that iterates over `ctx.remaining_accounts` and uses those accounts in token transfers, authority checks, or PDA derivation without explicit validation on each account.
+
+Sources: [Dedaub - From Ethereum to Solana: How Developer Assumptions Can Introduce Critical Security Vulnerabilities](https://dedaub.com/blog/ethereum-developers-on-solana-common-mistakes/), [Cantina - Solana Security Risks, Issues & Mitigation Guide](https://cantina.xyz/blog/securing-solana-a-developers-guide), [Three Sigma - Rust Memory Safety on Solana: What Smart Contract Audits Reveal](https://threesigma.xyz/blog/rust-and-solana/rust-memory-safety-on-solana).
+
 ## Native Rust / Pinocchio Notes
 
 1. Check `account.owner`, data length, and type discriminator before any deserialize or unpack call.
