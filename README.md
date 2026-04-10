@@ -1,10 +1,10 @@
-# Solana Audit Skill for Claude Code
+# Solana Audit Skill
 
-A standalone, evidence-backed Claude Code skill for Solana security reviews, audit planning, exploit analysis, and report-driven vulnerability taxonomy work.
+An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit analysis, and report-driven vulnerability taxonomy work.
 
 ## Overview
 
-This repository packages a taxonomy-first Solana audit skill that mirrors the conventions used by the local standalone Solana skill and the broader Agent Skills collection.
+This repository packages a taxonomy-first Solana audit skill for Agent Skills-compatible tools such as Claude Code and similar IDE agents.
 
 The pack focuses on repeated Solana failure modes that show up across public audits, disclosures, and incident write-ups:
 
@@ -22,39 +22,18 @@ The pack focuses on repeated Solana failure modes that show up across public aud
 ### Quick Install With `npx`
 
 ```bash
-npx skills add https://github.com/Berektassuly/solana-audit-skill --skill solana-audit
+npx skills add Berektassuly/solana-audit-skill --skill solana-audit
 ```
 
 This is the recommended installation path for Agent Skills-compatible environments.
-
-### Manual Install
-
-```bash
-git clone https://github.com/Berektassuly/solana-audit-skill
-cd solana-audit-skill
-./install.sh
-```
-
-### Project Install
-
-```bash
-./install.sh --project
-```
-
-### Custom Path
-
-```bash
-./install.sh --path /custom/path/solana-audit
-```
 
 ## Repository Structure
 
 ```text
 solana-audit-skill/
+|-- .gitignore
 |-- LICENSE
 |-- README.md
-|-- install.sh
-|-- solana-audit-skill.zip
 |-- skill/
 |   |-- SKILL.md
 |   `-- references/
@@ -138,21 +117,6 @@ The main `SKILL.md` is kept compact and operational. Detailed audit material liv
 - checklists for intake, program review, client review, and release blocking
 - taxonomy notes for canonical Solana vulnerability classes
 - corpus and cross-report references for normalization work
-
-## Packaging
-
-The packaged archive is created so the repository root appears at the archive root and `.git/` is excluded from the deliverable. One workable PowerShell flow is:
-
-```powershell
-$stageRoot = Join-Path $env:TEMP "solana-audit-skill-package"
-$repoStage = Join-Path $stageRoot "solana-audit-skill"
-New-Item -ItemType Directory -Force -Path $repoStage | Out-Null
-Copy-Item LICENSE,README.md,install.sh -Destination $repoStage
-Copy-Item skill,tests -Destination $repoStage -Recurse
-Compress-Archive -Path $repoStage -DestinationPath $env:TEMP\solana-audit-skill.zip -Force
-```
-
-The resulting `solana-audit-skill.zip` is then moved back into this repository.
 
 ## Testing
 
