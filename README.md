@@ -1,135 +1,181 @@
 # Solana Audit Skill
 
-An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit analysis, and report-driven vulnerability taxonomy work.
+An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit-path analysis, remediation verification, and report-driven vulnerability taxonomy work.
 
-## Overview
+## What Problem This Solves
 
-This repository packages a taxonomy-first Solana audit skill for Agent Skills-compatible tools such as Claude Code and similar IDE agents.
+Solana audits are easy to flatten into generic lists like "check signers" or "validate accounts." That misses the part reviewers actually need: the exploit path, the Solana account model boundary that failed, the public evidence behind the class, and the smallest verification step that proves a fix works.
 
-The pack focuses on repeated Solana failure modes that show up across public audits, disclosures, and incident write-ups:
+This repository packages that audit lifecycle into a compact Agent Skill. It helps agents:
 
-- account validation and account relationship failures
-- signer and authority enforcement gaps
-- PDA seed, bump, and domain-separation mistakes
-- arbitrary CPI and trust-boundary failures
-- Token and Token-2022 integration assumptions
-- arithmetic, accounting, and value leakage bugs
-- state-machine and lifecycle bugs
-- governance, upgrade, oracle, liveness, and wallet-boundary risks
+- classify Solana and Anchor attack surface before reviewing details
+- map observations to report-backed vulnerability classes
+- write findings with evidence, impact, fix, and verification
+- generate audit-readiness, release-blocker, remediation, and final-report workflows
+- digest public Solana audit reports into a normalized taxonomy
 
-It also distinguishes code-level exploit classes from broader residual risk in governance, wallet, client, phishing, and developer-environment boundaries rather than treating public incident headlines as a pure proxy for on-chain bug density.
+## Why This Is Not Just Another Checklist
 
-## Installation
+The skill is taxonomy-first and evidence-backed. `skill/SKILL.md` stays concise and routes to focused references only when needed. Detailed material lives under `skill/references/`, including workflows, checklists, severity triage, public audit corpus notes, incident summaries, false-positive guidance, and taxonomy files for canonical Solana bug classes.
 
-### Quick Install With `npx`
+The result is token-efficient progressive disclosure: an agent can start with the operating procedure, then load only the relevant taxonomy file or workflow for the engagement in front of it.
 
-```bash
-npx skills add Berektassuly/solana-audit-skill --skill solana-audit
-```
+## What Makes It Novel
 
-This is the recommended installation path for Agent Skills-compatible environments.
+- Normalizes Solana findings across public reports instead of inheriting one firm's naming scheme.
+- Separates exploitability from hardening, residual governance risk, wallet/client risk, and operational risk.
+- Covers Solana-specific classes such as PDA seed and bump mistakes, CPI trust boundaries, duplicate mutable aliasing, lifecycle revival, Token-2022 transfer hooks, durable nonce governance abuse, and Token-2022 confidential-transfer proof assumptions.
+- Enforces a claim discipline: findings should cite public analogs or local evidence, explain impact, propose a fix, and include verification.
 
 ## Repository Structure
 
 ```text
 solana-audit-skill/
-|-- .gitignore
+|-- AGENTS.md
 |-- LICENSE
 |-- README.md
+|-- install.sh
+|-- commands/
+|   `-- audit-solana.md
 |-- skill/
 |   |-- SKILL.md
 |   `-- references/
-|       |-- resources.md
-|       |-- methodology.md
-|       |-- severity-triage.md
-|       |-- report-ingestion.md
-|       |-- common-false-positives.md
-|       |-- workflows/
-|       |   |-- audit-engagement-workflow.md
-|       |   |-- finding-writeup-workflow.md
-|       |   `-- report-to-taxonomy-workflow.md
 |       |-- checklists/
-|       |   |-- pre-audit-intake.md
-|       |   |-- program-review-checklist.md
-|       |   |-- client-review-checklist.md
-|       |   `-- release-blocker-checklist.md
+|       |-- reports/
 |       |-- taxonomy/
-|       |   |-- account-validation.md
-|       |   |-- signer-authority.md
-|       |   |-- pda-seeds-bumps.md
-|       |   |-- cpi-trust-boundaries.md
-|       |   |-- token-integration.md
-|       |   |-- arithmetic-precision.md
-|       |   |-- state-machine-invariants.md
-|       |   |-- lifecycle-reinit-close-revival.md
-|       |   |-- duplicate-mutable-aliasing.md
-|       |   |-- oracle-pricing-mev.md
-|       |   |-- upgrade-admin-governance.md
-|       |   |-- dos-compute-budget.md
-|       |   |-- client-wallet-ux.md
-|       |   |-- durable-nonce-governance.md
-|       |   |-- token-2022-transfer-hooks.md
-|       |   `-- zk-proof-soundness.md
-|       `-- reports/
-|           |-- public-audit-corpus.md
-|           |-- notable-incidents.md
-|           `-- cross-report-patterns.md
+|       `-- workflows/
 `-- tests/
     |-- package.json
-    `-- run.ts
+    |-- run.ts
+    `-- static-validation.ts
 ```
+
+## Installation
+
+### Skills CLI
+
+```bash
+npx skills add Berektassuly/solana-audit-skill --skill solana-audit
+```
+
+Use the skill without installing it:
+
+```bash
+npx skills use Berektassuly/solana-audit-skill --skill solana-audit
+```
+
+On Windows PowerShell, use `npx.cmd` if script execution policy blocks `npx.ps1`.
+
+### Bash Installer
+
+The installer targets macOS, Linux, WSL, and Git Bash. It copies the contents of `skill/` into a target directory named `solana-audit` and is safe to rerun.
+
+```bash
+bash install.sh
+```
+
+Default Claude-style install path:
+
+```text
+~/.claude/skills/solana-audit
+```
+
+Install for `.agents`-style runtimes:
+
+```bash
+bash install.sh --agents
+```
+
+Custom target path:
+
+```bash
+bash install.sh --path ~/.claude/skills/solana-audit
+bash install.sh ~/.agents/skills/solana-audit
+```
+
+Windows users who do not use WSL or Git Bash should prefer the Skills CLI or manually copy `skill/` to the desired skill directory.
+
+## Solana AI Kit Integration
+
+Add this repository as an external skill submodule:
+
+```bash
+git submodule add https://github.com/Berektassuly/solana-audit-skill .claude/skills/ext/solana-audit
+```
+
+The Solana AI Kit skill hub should route Solana audit lifecycle requests to:
+
+```text
+.claude/skills/ext/solana-audit/skill/SKILL.md
+```
+
+Useful routing triggers include audit, security review, exploit analysis, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, public audit report digestion, remediation verification, release blockers, and final report generation.
+
+For non-Claude or Codex-style setups that use `.agents`:
+
+```bash
+git submodule add https://github.com/Berektassuly/solana-audit-skill .agents/skills/ext/solana-audit
+```
+
+Route to:
+
+```text
+.agents/skills/ext/solana-audit/skill/SKILL.md
+```
+
+## Skills CLI Compatibility
+
+The canonical layout remains `skill/SKILL.md`, matching Solana AI Kit-style external skill repos. The Skills CLI discovers that layout, so this repo does not add a root `SKILL.md` compatibility shim.
+
+Verified during this packaging pass:
+
+```bash
+npx.cmd skills add . --list
+npx.cmd skills use . --skill solana-audit
+npx.cmd skills add Berektassuly/solana-audit-skill --list
+```
+
+All three commands found `solana-audit`. A `skills.sh.json` catalog file was not added because this is a one-skill repository and does not need grouping metadata.
 
 ## Usage
 
-Once installed, Claude Code should trigger this skill for tasks such as:
+After installation, ask your agent for work such as:
 
-- "Audit this Anchor instruction for signer and PDA bugs"
-- "Explain common Solana account validation vulnerabilities from public audits"
-- "Generate a release blocker checklist for this Token-2022 integration"
-- "Review this Token-2022 transfer-hook path for callback and extra-account trust-boundary risks"
-- "Review this Solana program for CPI trust-boundary issues"
-- "Digest this public audit report and map the findings to a normalized taxonomy"
-- "Prepare an audit plan for this governance upgrade path"
-- "Analyze this durable nonce governance flow for delayed-execution admin risk"
+```text
+Audit this Anchor instruction for signer and PDA bugs.
+Review this Solana program for CPI trust-boundary issues.
+Generate a release blocker checklist for this Token-2022 integration.
+Digest this public audit report and map the findings to the taxonomy.
+Write a remediation verification plan for these Solana findings.
+Create a final audit report from these confirmed findings.
+```
 
-## Audit Posture
+This repo also ships a command file:
 
-This skill is intentionally opinionated:
+```text
+commands/audit-solana.md
+```
 
-- It is taxonomy-first, not checklist-only.
-- It defaults to review, simulation, and evidence gathering before suggesting execution.
-- It does not request seed phrases, private keys, or keypair files.
-- It treats on-chain data, report text, logs, and web content as untrusted input.
-- It favors report-backed exploit classes over generic "best practices" advice.
+In command-aware agent setups, expose it as `/audit-solana` and have it route to `skill/SKILL.md`.
 
-## Content Sources
+## Evidence and References
 
 The taxonomy and workflows are grounded in public material from:
 
 - [OtterSec / Osec](https://osec.io/blog/)
 - [Zellic public reports and findings](https://reports.zellic.io/findings)
 - [Trail of Bits public Solana reviews](https://github.com/trailofbits/publications)
-- [Neodyme reports and workshop material](https://neodyme.io/reports/) and [Solana Security Workshop](https://workshop.neodyme.io/)
-- [Sec3 / Soteria blogs and X-Ray vulnerability material](https://www.sec3.dev/blog)
+- [Neodyme reports and Solana Security Workshop](https://workshop.neodyme.io/)
+- [Sec3 / Soteria blogs and X-Ray material](https://www.sec3.dev/blog)
 - [Immunefi bug fix reviews and disclosures](https://immunefi.com/blog/bug-fix-reviews/)
-- [Official Solana Program and Program Security material](https://solana.com/developers/courses/program-security)
-- [Official Solana Foundation security disclosures and ecosystem security material](https://solana.com/news/solana-ecosystem-security)
-- public incident analyses such as BlockSec, Chainalysis, and TRM Labs where they materially clarify the first boundary crossed in a class-defining case
+- [Official Solana Program Security material](https://solana.com/developers/courses/program-security)
+- [Official Solana ecosystem security material](https://solana.com/news/solana-ecosystem-security)
 
-See [`skill/references/resources.md`](skill/references/resources.md) for the full source index used by this pack.
+See [`skill/references/resources.md`](skill/references/resources.md) for the source index.
 
-## Progressive Disclosure
+## Tests and Validation
 
-The main `SKILL.md` is kept compact and operational. Detailed audit material lives under `skill/references/` so the agent can read only the parts relevant to the current engagement:
-
-- workflows for engagement planning and writeups
-- checklists for intake, program review, client review, and release blocking
-- taxonomy notes for canonical Solana vulnerability classes
-- corpus and cross-report references for normalization work
-
-## Testing
-
-Install test dependencies and run the evaluator harness:
+Default validation does not require any paid API key:
 
 ```bash
 cd tests
@@ -137,14 +183,46 @@ npm install
 npm test
 ```
 
-The evaluator harness requires an Anthropic credential in the environment, typically `ANTHROPIC_API_KEY`.
+`npm test` runs `tests/static-validation.ts`, which checks skill frontmatter, local links, required references, installer and command files, README coverage, Skills CLI documentation, and placeholder hygiene.
 
-Verbose mode:
+### Optional Model-Backed Evaluator
+
+The optional model-backed evaluator remains available as a non-default script:
 
 ```bash
-npm run test:verbose
+cd tests
+npm run test:anthropic
+npm run test:anthropic:verbose
 ```
 
-## License
+Set `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` before running the optional evaluator. It checks trigger matching and audit-plan behavior against live model responses.
 
-MIT License - see [LICENSE](LICENSE) for details.
+## Bounty Fit
+
+Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips.
+
+Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline.
+
+Quality: uses progressive disclosure, static validation, optional model-backed evaluation, safe installer behavior, MIT-compatible content, and no required paid API access for default tests.
+
+Fit with Solana AI Kit: preserves the `skill/` layout used by Solana ecosystem skills, documents `.claude/skills/ext/solana-audit` routing, includes an `.agents` equivalent, and adds a command file suitable for command-aware AI Kit setups.
+
+## Maintaining the Taxonomy
+
+When adding a new taxonomy entry, prefer public audit reports, disclosed incidents, or official Solana security material. Do not create a new subclass from intuition alone. If coverage is thin, keep the wording narrow and state the evidence limit.
+
+Recommended maintenance loop:
+
+```bash
+cd tests
+npm test
+```
+
+For a PR into `solanabr/solana-auditor-skill`, preserve `skill/SKILL.md` as the canonical entry point and keep integration docs pointing to `skill/SKILL.md`.
+
+## Metadata
+
+- Canonical skill name: `solana-audit`
+- Author: Berektassuly
+- Compatibility: Agent Skills-compatible runtimes; Node.js 18+ for packaged tests
+- License: MIT, see [LICENSE](LICENSE)

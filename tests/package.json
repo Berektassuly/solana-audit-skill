@@ -2,8 +2,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "npx tsx run.ts",
-    "test:verbose": "npx tsx run.ts --verbose"
+    "test": "tsx static-validation.ts",
+    "test:anthropic": "tsx run.ts",
+    "test:anthropic:verbose": "tsx run.ts --verbose",
+    "eval": "tsx run.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

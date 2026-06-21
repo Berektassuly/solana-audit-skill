@@ -1,12 +1,7 @@
 ---
 name: solana-audit
-description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, or generate audit-readiness and release-blocker checklists.
+description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, or generate audit-readiness, release-blocker, remediation, and final-report workflows.
 user-invocable: true
-license: MIT
-compatibility: Requires Claude Code or a compatible Agent Skills runtime; Node.js 18+ is needed to run the packaged tests
-metadata:
-  author: Berektassuly
-  version: 1.0.0
 ---
 
 # Solana Audit Skill
@@ -131,6 +126,8 @@ Escalate when any of the following are unclear:
 - Separate exploitability from hardening. Some issues are direct drains; some are liveness or operational risks.
 - Call out when a category is known to generate false positives unless paired with a second condition.
 - If the user asks for a checklist, generate it from the taxonomy and target architecture instead of using a generic template.
+- In final audit output, lead each finding with evidence, impact, fix, and verification. Keep internal process notes out of customer-facing reports unless the user asks for them.
+- Label hypotheses, confirmed findings, and residual risks separately so unsupported claims do not look like reproduced exploits.
 
 ## Progressive disclosure
 
