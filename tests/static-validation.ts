@@ -14,7 +14,15 @@ const skillsDir = join(repoRoot, "skills");
 const incidentSkillDir = join(repoRoot, "skills", "solana-incident-response");
 const incidentSkillPath = join(incidentSkillDir, "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
-const skillFrontmatterFields = new Set(["name", "description", "license", "allowed-tools", "metadata", "compatibility"]);
+const skillFrontmatterFields = new Set([
+  "name",
+  "description",
+  "license",
+  "allowed-tools",
+  "metadata",
+  "compatibility",
+  "user-invocable",
+]);
 const skillNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const maxSkillNameLength = 64;
 const maxDescriptionLength = 1024;
