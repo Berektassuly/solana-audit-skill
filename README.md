@@ -1,5 +1,34 @@
 # Solana Audit Skill
 
+[![Validation](https://github.com/Berektassuly/solana-audit-skill/actions/workflows/validation.yml/badge.svg)](https://github.com/Berektassuly/solana-audit-skill/actions/workflows/validation.yml)
+
+## Judge TL;DR
+
+Problem: Solana builders do not just need another security checklist; they need an audit-lifecycle skill that turns code, reports, transactions, and release evidence into defensible findings, verification targets, release gates, and final report artifacts.
+
+Why now: the 2026 Solana stack has more Token-2022, transfer-hook, ZK proof, upgrade, transaction-safety, and agent-signing surfaces than generic audit prompts can handle safely.
+
+Three killer workflows:
+- `finding-writeup-workflow`: evidence-backed findings with Evidence, Exploit Path, Impact, Fix, Verification, and explicit Hypothesis / Confirmed Finding / Residual Risk labels.
+- `release-gate-workflow`: machine-readable `PASS` / `FAIL` / `SKIP` release checks where missing required evidence is `FAIL`, not hand-waved.
+- `transaction-safety-workflow`: pre-sign transaction review with `AUTONOMOUS_OK`, `CONFIRM_REQUIRED`, `NEVER_AUTO_SIGN`, and `NEEDS_MORE_INFO` labels.
+
+60-second review path: start with [`DEMO.md`](DEMO.md), then inspect [`skill/SKILL.md`](skill/SKILL.md) and the focused references it routes to.
+
+Default validation:
+
+```bash
+cd tests
+npm test
+```
+
+On Windows PowerShell:
+
+```powershell
+cd tests
+npm.cmd test
+```
+
 From public Solana failures to audit-ready findings: solana-audit turns real report-backed vulnerability patterns into progressive audit workflows for attack-surface mapping, pre-audit design review, transaction signing boundaries, Token-2022 policy, payment verification, release gates, severity triage, finding writeups, remediation verification, formal-verification handoff, and final audit reports.
 
 An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit-path analysis, transaction and payment boundary review, remediation verification, release-readiness review, and report-driven vulnerability taxonomy work.
@@ -52,6 +81,8 @@ The novelty is the lifecycle plus evidence discipline: a normalized public-repor
 ## 60-Second Judge Demo
 
 See [`DEMO.md`](DEMO.md) for the canonical short demo with user prompt, exact references loaded, finding output, verification, final report excerpt, and why the flow matters.
+
+For bounty review, start with [`DEMO.md`](DEMO.md). It shows the intended judge path in one minute: user prompt -> references loaded -> taxonomy-mapped finding -> verification target -> final report excerpt. The detailed taxonomy exists for progressive loading after the demo path is clear.
 
 User prompt:
 
@@ -158,6 +189,8 @@ On Windows PowerShell, use `npx.cmd` if script execution policy blocks `npx.ps1`
 
 The installer targets macOS, Linux, WSL, and Git Bash. It copies the contents of `skill/` into a target directory named `solana-audit` and is safe to rerun.
 
+`bash install.sh` installs only the canonical bounty skill from `skill/` into `solana-audit`; the supplemental `skills/solana-incident-response` package is a bonus adjacent workflow and is not the core bounty skill.
+
 ```bash
 bash install.sh
 ```
@@ -189,8 +222,6 @@ bash install.sh --path C:/Users/you/.agents/skills/solana-audit
 ```
 
 Backslash-style `C:\...` arguments can be interpreted by the shell before the installer sees them, so this repo does not claim support for that form. Windows users who do not use WSL or Git Bash should prefer the Skills CLI or manually copy `skill/` to the desired skill directory.
-
-The bash installer remains scoped to the canonical `solana-audit` package under `skill/`.
 
 ## Solana AI Kit Integration
 
