@@ -10,33 +10,33 @@ description: Compact templates for Solana incident updates, timelines, and post-
 ```markdown
 # Incident Triage Update
 
-Status: active | contained | monitoring | closed
-Prepared: YYYY-MM-DD HH:MM UTC
-Scope: cluster, programs, mints, vaults, wallets, or clients
+Status: Choose active, contained, monitoring, or closed.
+Prepared: Use the current UTC timestamp.
+Scope: Name the cluster and affected programs, mints, vaults, wallets, or clients.
 
 ## Confirmed Facts
-- Fact with signature, slot, account, source URL, or log reference.
+- Add one bullet per confirmed fact, with a signature, slot, account, source URL, or log reference.
 
 ## Current Hypotheses
-- Hypothesis, confidence, evidence supporting it, evidence against it.
+- Add one bullet per hypothesis, with confidence, supporting evidence, and contradicting evidence.
 
 ## Timeline
 | Time UTC | Slot | Signature or Artifact | Event | Confidence |
 | --- | --- | --- | --- | --- |
 
 ## Blast Radius
-- Assets affected:
-- Authorities affected:
-- Users or positions affected:
-- Replay or pending-action risk:
-- Unknowns:
+- Assets affected: state confirmed movement, exposure, or no confirmed loss.
+- Authorities affected: name any compromised, rotated, or still-at-risk authorities.
+- Users or positions affected: describe confirmed scope and uncertainty.
+- Replay or pending-action risk: list durable nonces, queued proposals, outstanding signatures, or none observed.
+- Unknowns: list the evidence needed to narrow the blast radius.
 
 ## Containment Options
 | Option | Authority Needed | Risk Reduced | User Impact | Verification |
 | --- | --- | --- | --- | --- |
 
 ## Next Evidence To Collect
-- Read-only collection step and owner.
+- Add one bullet per read-only collection step and name the responsible owner.
 ```
 
 ## Public post-mortem skeleton
@@ -69,12 +69,12 @@ State what users should do, what they should not do, and how official updates wi
 ## Executive update
 
 ```markdown
-Current status:
-Most likely root cause:
-Confirmed impact:
-Containment completed:
-Decisions needed:
-Next update time:
+Current status: Give the shortest accurate incident state.
+Most likely root cause: State confirmed root cause or label as a hypothesis.
+Confirmed impact: Quantify confirmed loss, exposure, or service impact.
+Containment completed: List completed containment actions and verification.
+Decisions needed: Name decision owners and the specific choice required.
+Next update time: Give the next UTC update time or trigger.
 ```
 
 ## Wording discipline
