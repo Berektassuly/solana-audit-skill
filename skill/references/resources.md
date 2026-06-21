@@ -7,6 +7,8 @@ description: Source index for the public reports, disclosures, and technical wri
 
 This pack is grounded in public primary sources first, then in comparable public Solana security corpora when report-level coverage is thin.
 
+Last refreshed for Solana AI Kit bounty positioning and current Solana security/source freshness: 2026-06-21.
+
 ## Audit firms and public findings
 
 ### Zellic
@@ -70,6 +72,17 @@ This pack is grounded in public primary sources first, then in comparable public
 1. [Riverguard](https://riverguard.neodyme.io/) - Neodyme service that simulates mutated transactions against deployed Solana programs and stores findings for developer triage; listed by Solana Foundation as an ecosystem security resource.
 2. [Riverguard: Mutation Rules for Finding Vulnerabilities](https://neodyme.io/blog/riverguard_3_fuzzcases/) - technical description of Riverguard's mutated-transaction attack simulation approach and the vulnerability patterns it is designed to surface.
 3. [Introducing the Solana Transaction Security Standard](https://www.range.org/blog/announcing-the-solana-transaction-security-standard) - Range description of real-time risk scoring, pre-execution transaction simulation, and transaction-level alerting for Solana wallets, multisigs, and apps.
+
+### Current 2026 stack and verification references
+
+1. [Solana Token Extensions documentation](https://solana.com/docs/tokens/extensions) - current Token-2022 extension semantics, extension compatibility notes, and TLV state handling.
+2. [Solana Transfer Hook guide](https://solana.com/developers/guides/token-extensions/transfer-hook) - current transfer-hook interface behavior, ExtraAccountMeta flow, and signer privilege constraints during hook CPI.
+3. [Solana CPI documentation](https://solana.com/docs/core/cpi) - current Cross Program Invocation and PDA signing model.
+4. [Anchor LiteSVM testing documentation](https://www.anchor-lang.com/docs/testing/litesvm) - current in-process Solana VM testing guidance for Rust, TypeScript, JavaScript, and Python.
+5. [Solana Mollusk testing documentation](https://solana.com/docs/programs/testing/mollusk) - current lightweight SVM instruction-testing guidance with explicit account setup.
+6. [Solana verified builds documentation](https://solana.com/docs/programs/verified-builds) - current build verification context for matching local source builds to on-chain program hashes.
+7. [QEDGen Solana skills](https://github.com/QEDGen/solana-skills) - formal-verification-oriented skill material for QEDSpec, property tests, Kani harnesses, Lean proofs, and SBF-focused workflows.
+8. [Kani Rust Verifier](https://model-checking.github.io/kani/) - Rust model-checking reference for proof harnesses, safety checks, overflow checks, and assertion-based correctness properties.
 
 ## Comparable public Solana security corpora
 

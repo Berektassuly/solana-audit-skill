@@ -1,10 +1,16 @@
 # Solana Audit Skill
 
+From public Solana failures to audit-ready findings: solana-audit turns real report-backed vulnerability patterns into a progressive skill for attack-surface mapping, severity triage, finding writeups, remediation verification, formal-verification handoff, and final audit reports.
+
 An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit-path analysis, remediation verification, and report-driven vulnerability taxonomy work.
+
+In 60 seconds, a judge should see the prompt, the references loaded, the output contract, and one compact finding with Evidence, Impact, Fix, and Verification. This repo keeps that path short while preserving the deeper taxonomy under `skill/references/`.
 
 ## What Problem This Solves
 
 Solana audits are easy to flatten into generic lists like "check signers" or "validate accounts." That misses the part reviewers actually need: the exploit path, the Solana account model boundary that failed, the public evidence behind the class, and the smallest verification step that proves a fix works.
+
+Builders do not only need another list of Solana security checks. They need an agent that can move from scope and attack surface to evidence, exploit path, severity, fix, verification, and customer-facing report artifacts without pretending every suspicion is a confirmed exploit.
 
 This repository packages that audit lifecycle into a compact Agent Skill. It helps agents:
 
@@ -23,12 +29,58 @@ The result is token-efficient progressive disclosure: an agent can start with th
 
 ## What Makes It Novel
 
+The novelty is the lifecycle plus evidence discipline: a normalized public-report taxonomy, explicit hypothesis versus confirmed-finding labels, residual-risk handling, and formal-verification handoff for LiteSVM, Mollusk, SBF harnesses, QEDGen, Lean, or Kani-style workflows.
+
 - Normalizes Solana findings across public reports instead of inheriting one firm's naming scheme.
 - Separates exploitability from hardening, residual governance risk, wallet/client risk, and operational risk.
 - Covers Solana-specific classes such as PDA seed and bump mistakes, CPI trust boundaries, duplicate mutable aliasing, lifecycle revival, Token-2022 transfer hooks, durable nonce governance abuse, and Token-2022 confidential-transfer proof assumptions.
 - Enforces a claim discipline: findings should cite public analogs or local evidence, explain impact, propose a fix, and include verification.
 - Adds a formal verification handoff workflow for LiteSVM property tests, Mollusk or SBF-focused harnesses, and proof-oriented handoff without overclaiming verification results.
 - Adds a final audit report template that separates confirmed findings, resolved hypotheses, residual risk, remediation status, and limitations.
+
+## 60-Second Judge Demo
+
+User prompt:
+
+```text
+Audit this Anchor vault claim path. It accepts Token-2022 mints, uses a PDA vault authority, and passes a reward mint through remaining_accounts before a rewards CPI. Produce one audit finding if the issue is supported.
+```
+
+References the agent should load:
+
+- `skill/SKILL.md`
+- `skill/references/workflows/finding-writeup-workflow.md`
+- `skill/references/taxonomy/account-validation.md`
+- `skill/references/taxonomy/token-integration.md`
+- `skill/references/taxonomy/cpi-trust-boundaries.md`
+
+Output contract:
+
+- classify the result as `Hypothesis`, `Confirmed Finding`, or `Residual Risk`
+- map it to the taxonomy
+- include Evidence, Impact, Fix, and Verification
+- state false-positive conditions when exploitability depends on missing code or tests
+
+Compact sample finding:
+
+```text
+Status: Hypothesis
+Taxonomy: account-validation, token-integration, cpi-trust-boundaries
+
+Evidence:
+The claim path passes `ctx.remaining_accounts[0]` as the reward mint into the rewards CPI. The prompt does not show a check that binds this mint to vault state, an allowlist, the expected token program variant, or supported Token-2022 extensions before CPI construction.
+
+Impact:
+If reachable, an attacker may redirect reward accounting or execution through an unintended mint. This is not a confirmed drain until the review proves the CPI can credit value or mutate vault accounting with the attacker-selected mint.
+
+Fix:
+Bind the reward mint to vault state or an allowlist, validate owner and token program variant, reject unsupported Token-2022 extension behavior, and perform these checks before building the CPI or forwarding signer seeds.
+
+Verification:
+Add regression tests that provide a wrong mint, wrong token program variant, and unsupported Token-2022 extension mix through `remaining_accounts`; each test should reject before CPI and before state mutation.
+```
+
+For complete prompt-to-artifact examples, see `examples/audit-plan-example.md`, `examples/finding-writeup-example.md`, and `examples/final-report-example.md`.
 
 ## Repository Structure
 
@@ -191,7 +243,7 @@ This repo also includes a supplemental package:
 skills/solana-incident-response/SKILL.md
 ```
 
-Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow. The canonical bounty skill remains `skill/SKILL.md`; `skills/solana-incident-response` is supplemental.
+Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It is a bonus adjacent workflow, not the bounty skill. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow. The canonical bounty skill remains `skill/SKILL.md`; `skills/solana-incident-response` is supplemental.
 
 ## Examples
 
@@ -220,6 +272,10 @@ The taxonomy and workflows are grounded in public material from:
 - [Official Solana ecosystem security material](https://solana.com/news/solana-ecosystem-security)
 
 See [`skill/references/resources.md`](skill/references/resources.md) for the source index.
+
+### Source Freshness
+
+This source index was refreshed against public Solana AI Kit bounty research and current Solana security material on 2026-06-21. The corpus and workflows cover current Solana concerns such as Token-2022 extension assumptions, transfer hooks, durable nonce governance risk, ZK proof soundness, upgrade migration risk, LiteSVM, Mollusk, and SBF-focused harness planning. These references support audit planning and finding writeups; they do not certify any target protocol as secure.
 
 ## Tests and Validation
 
@@ -254,13 +310,15 @@ Set `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` before running the optional ev
 
 ## Bounty Fit
 
-Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips.
+Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips. Builders can move from scope and attack surface to evidence, exploit path, severity, fix, verification, and customer-facing report artifacts without treating every suspicion as a reproduced exploit.
 
-Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline, formal verification handoff, and final report generation.
+Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline, hypothesis versus confirmed-finding labels, residual-risk handling, formal verification handoff, and final report generation.
 
 Quality: uses progressive disclosure, static validation, no-credential golden tests, optional model-backed evaluation, safe installer behavior, MIT-compatible content, and no required paid API access for default tests.
 
 Fit with Solana AI Kit: preserves the `skill/` layout used by Solana ecosystem skills, documents `.claude/skills/ext/solana-audit` routing, includes an `.agents` equivalent, adds a command file suitable for command-aware AI Kit setups, and keeps detailed taxonomy and workflow material under `skill/references/`.
+
+Competitive differentiation: Transaction reliability, Token-2022, program-upgrade, and diagnostics skills are useful narrow tools. solana-audit is the cross-cutting audit layer that can evaluate those surfaces as part of one evidence-backed review and produce the artifacts teams actually need before launch or remediation signoff.
 
 ## Maintaining the Taxonomy
 
