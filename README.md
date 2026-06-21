@@ -13,7 +13,7 @@ Three killer workflows:
 - `release-gate-workflow`: machine-readable `PASS` / `FAIL` / `SKIP` release checks where missing required evidence is `FAIL`, not hand-waved.
 - `transaction-safety-workflow`: pre-sign transaction review with `AUTONOMOUS_OK`, `CONFIRM_REQUIRED`, `NEVER_AUTO_SIGN`, and `NEEDS_MORE_INFO` labels.
 
-60-second review path: start with [`DEMO.md`](DEMO.md), then inspect [`skill/SKILL.md`](skill/SKILL.md) and the focused references it routes to.
+60-second review path: start with [`DEMO.md`](DEMO.md), then inspect [`CASE_STUDIES.md`](CASE_STUDIES.md), [`audit-evals/valorem-solana-audit-output.md`](audit-evals/valorem-solana-audit-output.md), [`skill/SKILL.md`](skill/SKILL.md), and the focused references it routes to.
 
 Default validation:
 
@@ -35,7 +35,7 @@ An evidence-backed Agent Skill for Solana security reviews, audit planning, expl
 
 In 60 seconds, a judge should see the prompt, the references loaded, the output contract, and one compact finding with Evidence, Impact, Fix, and Verification. This repo keeps that path short while preserving the deeper taxonomy under `skill/references/`.
 
-Start with [`DEMO.md`](DEMO.md) for the compact judge-facing path from user prompt -> references loaded -> finding -> verification -> report excerpt.
+Start with [`DEMO.md`](DEMO.md) for the compact judge-facing path from user prompt -> references loaded -> finding -> verification -> report excerpt. Then use [`CASE_STUDIES.md`](CASE_STUDIES.md) for three realistic prompt-to-artifact checks covering Token-2022 CPI risk, account-migration release gates, and Solana Pay server-side verification. For a local repo evaluation, see [`audit-evals/valorem-solana-audit-output.md`](audit-evals/valorem-solana-audit-output.md).
 
 ## What Problem This Solves
 
@@ -82,7 +82,7 @@ The novelty is the lifecycle plus evidence discipline: a normalized public-repor
 
 See [`DEMO.md`](DEMO.md) for the canonical short demo with user prompt, exact references loaded, finding output, verification, final report excerpt, and why the flow matters.
 
-For bounty review, start with [`DEMO.md`](DEMO.md). It shows the intended judge path in one minute: user prompt -> references loaded -> taxonomy-mapped finding -> verification target -> final report excerpt. The detailed taxonomy exists for progressive loading after the demo path is clear.
+For bounty review, start with [`DEMO.md`](DEMO.md). It shows the intended judge path in one minute: user prompt -> references loaded -> taxonomy-mapped finding -> verification target -> final report excerpt. Then inspect [`CASE_STUDIES.md`](CASE_STUDIES.md) for practical behavior checks across audit finding, release gate, and payment verification workflows, and [`audit-evals/valorem-solana-audit-output.md`](audit-evals/valorem-solana-audit-output.md) for a local evaluation against an Anchor and Token-2022 project. The detailed taxonomy exists for progressive loading after the demo path is clear.
 
 User prompt:
 
@@ -126,14 +126,21 @@ Add regression tests that provide a wrong mint, wrong token program variant, and
 
 For complete prompt-to-artifact examples, see [`DEMO.md`](DEMO.md), `examples/audit-plan-example.md`, `examples/finding-writeup-example.md`, and `examples/final-report-example.md`.
 
+For pragmatic judge-facing case studies, see [`CASE_STUDIES.md`](CASE_STUDIES.md). It keeps each case short enough to review quickly while showing references loaded, expected output contract, sample artifact, false-positive boundary, and verification target.
+
+For a local evaluation on an Anchor and Token-2022 project, see [`audit-evals/valorem-solana-audit-output.md`](audit-evals/valorem-solana-audit-output.md). The evaluation found a confirmed cross-auction bidder-state binding issue, kept a Token-2022 hook concern as residual risk, and records the remediation verification commands.
+
 ## Repository Structure
 
 ```text
 solana-audit-skill/
 |-- AGENTS.md
 |-- DEMO.md
+|-- CASE_STUDIES.md
 |-- LICENSE
 |-- README.md
+|-- audit-evals/
+|   `-- valorem-solana-audit-output.md
 |-- install.sh
 |-- agents/
 |   |-- audit-lead.md
