@@ -1,13 +1,16 @@
 #!/usr/bin/env npx tsx
 
-import { existsSync, readFileSync, readdirSync, statSync } from "fs";
-import { dirname, extname, join, relative, resolve } from "path";
+import { spawnSync } from "child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { dirname, extname, isAbsolute, join, relative, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 const skillDir = join(repoRoot, "skill");
 const skillPath = join(skillDir, "SKILL.md");
+const skillsDir = join(repoRoot, "skills");
 const incidentSkillDir = join(repoRoot, "skills", "solana-incident-response");
 const incidentSkillPath = join(incidentSkillDir, "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
@@ -70,6 +73,58 @@ function localMarkdownLinks(content: string): string[] {
   return links;
 }
 
+function markdownLinks(content: string): string[] {
+  const links: string[] = [];
+  const regex = /!?\[[^\]\n]*\]\(([^)]+)\)/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(content))) {
+    const rawTarget = match[1].trim();
+    const target = rawTarget.split(/\s+/)[0].replace(/^<|>$/g, "");
+    if (!target || target.startsWith("#")) continue;
+    links.push(target.replace(/#.*/, ""));
+  }
+
+  const referenceRegex = /^\s{0,3}\[[^\]\r\n]+\]:\s*(\S+)/gm;
+  while ((match = referenceRegex.exec(content))) {
+    const target = match[1].trim().replace(/^<|>$/g, "");
+    if (!target || target.startsWith("#")) continue;
+    links.push(target.replace(/#.*/, ""));
+  }
+
+  return links;
+}
+
+function isAllowedExternalLink(target: string): boolean {
+  return /^(https?:|mailto:)/i.test(target);
+}
+
+function isPathInside(targetPath: string, rootPath: string): boolean {
+  const rel = relative(rootPath, targetPath);
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+
+function checkPackagedSkillLinks(skillRoot: string, label: string) {
+  for (const file of walkFiles(skillRoot)) {
+    if (extname(file) !== ".md") continue;
+    const content = readText(file);
+    const fileLabel = relative(repoRoot, file);
+
+    for (const link of markdownLinks(content)) {
+      if (isAllowedExternalLink(link)) continue;
+
+      if (/^[A-Za-z][A-Za-z0-9+.-]*:/i.test(link)) {
+        fail(`${fileLabel} uses unsupported markdown link scheme: ${link}`);
+        continue;
+      }
+
+      const targetPath = resolve(dirname(file), decodeURIComponent(link));
+      check(isPathInside(targetPath, skillRoot), `${fileLabel} local link stays inside ${label}: ${link}`);
+      check(existsSync(targetPath), `${fileLabel} packaged local link resolves: ${link}`);
+    }
+  }
+}
+
 function walkFiles(dir: string, ignored = new Set([".git", "node_modules"])): string[] {
   const entries = readdirSync(dir, { withFileTypes: true });
   const files: string[] = [];
@@ -85,6 +140,89 @@ function walkFiles(dir: string, ignored = new Set([".git", "node_modules"])): st
   }
 
   return files;
+}
+
+function toBashFriendlyPath(path: string): string {
+  return path.replace(/\\/g, "/");
+}
+
+function runInstaller(args: string[]) {
+  return spawnSync("bash", ["install.sh", ...args], {
+    cwd: repoRoot,
+    encoding: "utf8",
+  });
+}
+
+function checkProcessSucceeded(result: ReturnType<typeof spawnSync>, message: string): boolean {
+  if (result.status === 0) {
+    pass(message);
+    return true;
+  }
+
+  const detail = [result.error?.message, result.stderr, result.stdout].filter(Boolean).join(" ").trim();
+  fail(detail ? `${message}: ${detail}` : message);
+  return false;
+}
+
+function isSafeTempRoot(path: string): boolean {
+  const resolved = resolve(path);
+  const rel = relative(resolve(tmpdir()), resolved);
+  return !rel.startsWith("..") && !isAbsolute(rel) && resolved.includes("solana-audit-install-");
+}
+
+function checkInstallerSmokeTest() {
+  const bashCheck = spawnSync("bash", ["--version"], { encoding: "utf8" });
+  if (bashCheck.error || bashCheck.status !== 0) {
+    fail("bash is available for install.sh smoke validation");
+    return;
+  }
+  pass("bash is available for install.sh smoke validation");
+
+  const tempRoot = mkdtempSync(join(tmpdir(), "solana-audit-install-"));
+  if (!isSafeTempRoot(tempRoot)) {
+    fail(`installer smoke temp root is safely scoped: ${tempRoot}`);
+    return;
+  }
+  pass("installer smoke temp root is safely scoped");
+
+  try {
+    const target = join(tempRoot, "solana-audit");
+    const targetArg = toBashFriendlyPath(target);
+
+    const firstInstall = runInstaller(["--path", targetArg]);
+    if (!checkProcessSucceeded(firstInstall, "install.sh --path installs into a temp target")) {
+      return;
+    }
+    if (!existsSync(join(target, "SKILL.md"))) {
+      fail("install.sh temp target contains SKILL.md");
+      return;
+    }
+    pass("install.sh temp target contains SKILL.md");
+
+    const extraFile = join(target, "extra-user-file.txt");
+    writeFileSync(extraFile, "preserve me\n", "utf8");
+
+    const secondInstall = runInstaller(["--path", targetArg]);
+    if (!checkProcessSucceeded(secondInstall, "install.sh rerun succeeds")) {
+      return;
+    }
+    check(existsSync(extraFile), "install.sh rerun preserves unrelated files");
+
+    const otherSkill = join(tempRoot, "different-skill");
+    mkdirSync(otherSkill, { recursive: true });
+    writeFileSync(
+      join(otherSkill, "SKILL.md"),
+      "---\nname: different-skill\ndescription: Existing different skill.\n---\n",
+      "utf8",
+    );
+
+    const differentSkillInstall = runInstaller(["--path", toBashFriendlyPath(otherSkill)]);
+    check(differentSkillInstall.status !== 0, "install.sh refuses to overwrite a different skill");
+  } finally {
+    if (isSafeTempRoot(tempRoot)) {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }
 }
 
 check(existsSync(skillPath), "skill/SKILL.md exists");
@@ -110,6 +248,8 @@ if (existsSync(skillPath)) {
     check(existsSync(targetPath), `SKILL.md local link resolves: ${link}`);
   }
 }
+
+checkPackagedSkillLinks(skillDir, "skill/");
 
 const requiredReferences = [
   "references/resources.md",
@@ -180,20 +320,22 @@ for (const ref of incidentRequiredReferences) {
 }
 
 if (existsSync(incidentSkillDir)) {
-  for (const file of walkFiles(incidentSkillDir)) {
-    if (extname(file) !== ".md") continue;
-    const content = readText(file);
-    for (const link of localMarkdownLinks(content)) {
-      const targetPath = resolve(dirname(file), decodeURIComponent(link));
-      check(existsSync(targetPath), `${relative(repoRoot, file)} local link resolves: ${link}`);
-    }
-  }
+  checkPackagedSkillLinks(incidentSkillDir, "skills/solana-incident-response");
 
   const openaiYamlPath = join(incidentSkillDir, "agents", "openai.yaml");
   if (existsSync(openaiYamlPath)) {
     const openaiYaml = readText(openaiYamlPath);
     check(openaiYaml.includes("$solana-incident-response"), "incident-response default prompt names the skill");
     check(openaiYaml.includes("Triage Solana exploits and evidence"), "incident-response UI metadata is specific");
+  }
+}
+
+if (existsSync(skillsDir)) {
+  for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const installableSkillDir = join(skillsDir, entry.name);
+    if (installableSkillDir === incidentSkillDir) continue;
+    checkPackagedSkillLinks(installableSkillDir, `skills/${entry.name}`);
   }
 }
 
@@ -206,6 +348,8 @@ if (existsSync(readmePath)) {
   check(readme.includes("bounty fit"), "README maps bounty fit");
   check(readme.includes("skills cli compatibility"), "README documents Skills CLI compatibility");
   check(readme.includes("optional model-backed evaluator"), "README documents the optional model-backed evaluator");
+  check(readme.includes("npm.cmd test"), "README documents npm.cmd test for Windows PowerShell");
+  check(readme.includes("/mnt/c/") && readme.includes("c:/users/"), "README documents Windows-friendly install.sh path forms");
   check(readme.includes("npx skills add berektassuly/solana-audit-skill --skill solana-audit"), "README includes Skills CLI add command");
   check(readme.includes(".claude/skills/ext/solana-audit/skill/skill.md"), "README includes AI Kit skill route");
   check(readme.includes("solana-incident-response"), "README documents the incident-response skill");
@@ -218,6 +362,7 @@ if (existsSync(installPath)) {
   const installer = readText(installPath);
   check(installer.includes("solana-audit"), "install.sh targets solana-audit");
   check(installer.includes("--agents"), "install.sh supports --agents mode");
+  checkInstallerSmokeTest();
 }
 
 const commandsDir = join(repoRoot, "commands");

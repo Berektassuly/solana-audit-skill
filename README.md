@@ -98,7 +98,14 @@ bash install.sh --path ~/.claude/skills/solana-audit
 bash install.sh ~/.agents/skills/solana-audit
 ```
 
-Windows users who do not use WSL or Git Bash should prefer the Skills CLI or manually copy `skill/` to the desired skill directory.
+When passing custom Windows paths through WSL or Git Bash, prefer POSIX-style or forward-slash paths:
+
+```bash
+bash install.sh --path /mnt/c/Users/you/.claude/skills/solana-audit
+bash install.sh --path C:/Users/you/.agents/skills/solana-audit
+```
+
+Backslash-style `C:\...` arguments can be interpreted by the shell before the installer sees them, so this repo does not claim support for that form. Windows users who do not use WSL or Git Bash should prefer the Skills CLI or manually copy `skill/` to the desired skill directory.
 
 The bash installer remains scoped to the canonical `solana-audit` package under `skill/`.
 
@@ -134,15 +141,15 @@ Route to:
 
 The canonical layout remains `skill/SKILL.md`, matching Solana AI Kit-style external skill repos. The Skills CLI discovers that layout, so this repo does not add a root `SKILL.md` compatibility shim.
 
-Verified during this packaging pass:
+Useful local compatibility checks:
 
 ```bash
 npx.cmd skills add . --list
 npx.cmd skills use . --skill solana-audit
-npx.cmd skills add Berektassuly/solana-audit-skill --list
+npx.cmd skills use . --skill solana-incident-response
 ```
 
-All three commands found `solana-audit`. Supplemental skills live under `skills/<skill-name>/SKILL.md`; this preserves the canonical audit entry point while allowing focused adjacent workflows.
+These commands exercise the canonical audit skill and the supplemental incident-response package. Supplemental skills live under `skills/<skill-name>/SKILL.md`; this preserves the canonical audit entry point while allowing focused adjacent workflows.
 
 ## Usage
 
@@ -203,7 +210,14 @@ npm install
 npm test
 ```
 
-`npm test` runs `tests/static-validation.ts`, which checks skill frontmatter, local links, required references, installer and command files, README coverage, Skills CLI documentation, and placeholder hygiene.
+On Windows PowerShell, use `npm.cmd` if script execution policy blocks `npm.ps1`:
+
+```powershell
+cd tests
+npm.cmd test
+```
+
+`npm test` runs `tests/static-validation.ts`, which checks skill frontmatter, packaged local links, required references, the installer smoke path, command files, README coverage, Skills CLI documentation, and placeholder hygiene.
 
 ### Optional Model-Backed Evaluator
 

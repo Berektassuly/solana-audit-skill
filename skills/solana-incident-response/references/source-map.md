@@ -26,11 +26,11 @@ Prefer primary sources and immutable artifacts. Use secondary explainers as lead
 
 Use these as response-pattern references, not as proof that a new incident has the same root cause:
 
-1. [Existing notable Solana incidents](../../../skill/references/reports/notable-incidents.md) - local normalized incident summaries from the audit skill.
-2. [Existing public audit corpus](../../../skill/references/reports/public-audit-corpus.md) - local table of report-backed findings and disclosed incident mechanics.
-3. [Anza web3.js root cause analysis](https://www.anza.xyz/blog/web3-js-exploit-root-cause-analysis) - public client supply-chain incident analysis.
-4. [Solana Foundation ZK ElGamal post-mortem, June 2025](https://solana.com/news/post-mortem-june-25-2025) - coordinated native-program incident response and no-known-exploitation disclosure.
-5. [zksecurity phantom challenge write-up](https://blog.zksecurity.xyz/posts/solana-phantom-challenge-bug/) - technical explanation of the ZK proof soundness issue.
+1. [Sec3 recent Solana hacks review](https://www.sec3.dev/blog/recent-hacks) - examples of fake-account, oracle, and wallet-boundary incidents.
+2. [Anza web3.js root cause analysis](https://www.anza.xyz/blog/web3-js-exploit-root-cause-analysis) - public client supply-chain incident analysis.
+3. [Solana Foundation ZK ElGamal post-mortem, June 2025](https://solana.com/news/post-mortem-june-25-2025) - coordinated native-program incident response and no-known-exploitation disclosure.
+4. [zksecurity phantom challenge write-up](https://blog.zksecurity.xyz/posts/solana-phantom-challenge-bug/) - technical explanation of the ZK proof soundness issue.
+5. Use the installed `solana-audit` skill by name for normalized audit-taxonomy research when the response has moved from active containment into root-cause classification.
 
 ## Source quality labels
 

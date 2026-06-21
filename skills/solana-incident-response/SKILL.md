@@ -9,7 +9,7 @@ description: Use when the user needs Solana incident triage, exploit or suspicio
 
 Use this skill for active or recently discovered Solana security incidents. Work from evidence first, preserve uncertainty, and avoid operational actions that could worsen the situation.
 
-Do not use this skill for routine pre-launch audits, generic Solana development, marketing announcements, or taxonomy-only research. Route those to the existing audit skill at [../../skill/SKILL.md](../../skill/SKILL.md) when there is no live incident, suspicious transaction set, or containment decision.
+Do not use this skill for routine pre-launch audits, generic Solana development, marketing announcements, or taxonomy-only research. Route those to the `solana-audit` skill by name when there is no live incident, suspicious transaction set, or containment decision.
 
 ## Safety guardrails
 
@@ -44,11 +44,11 @@ Use [references/triage-workflow.md](references/triage-workflow.md) to build a sl
 
 ### 4. Classify the first boundary crossed
 
-Map the incident to the first Solana security boundary crossed, then link to the audit taxonomy only as needed:
+Map the incident to the first Solana security boundary crossed, then switch to `solana-audit` by name only if deeper taxonomy work is needed:
 
 - account validation, signer authority, PDA, CPI, token integration, Token-2022 hook, ZK proof, arithmetic, lifecycle, duplicate aliasing, oracle, governance, durable nonce, DoS, or wallet/client boundary
-- see [../../skill/references/reports/cross-report-patterns.md](../../skill/references/reports/cross-report-patterns.md) for alias normalization
-- see [../../skill/references/reports/notable-incidents.md](../../skill/references/reports/notable-incidents.md) for comparable public incidents
+- normalize aliases to the boundary names above instead of inventing incident-specific labels
+- compare against public incident write-ups from [references/source-map.md](references/source-map.md)
 
 Do not create new taxonomy labels inside this skill. If the incident does not fit, say which boundary is uncertain and what evidence would disambiguate it.
 
@@ -96,4 +96,4 @@ Read these references only as needed:
 - Triage workflow: [references/triage-workflow.md](references/triage-workflow.md)
 - Source map: [references/source-map.md](references/source-map.md)
 - Output templates: [references/report-template.md](references/report-template.md)
-- Existing audit taxonomy entry point: [../../skill/SKILL.md](../../skill/SKILL.md)
+- Related audit skill: `solana-audit` for routine pre-launch review and deeper taxonomy work
