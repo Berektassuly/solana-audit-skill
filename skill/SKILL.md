@@ -1,7 +1,6 @@
 ---
 name: solana-audit
 description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, or generate audit-readiness, release-blocker, remediation, and final-report workflows.
-user-invocable: true
 ---
 
 # Solana Audit Skill

@@ -8,7 +8,7 @@
     "eval": "tsx run.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
-    "tsx": "^4.19.0"
+    "@anthropic-ai/sdk": "^0.105.0",
+    "tsx": "^4.22.4"
   }
 }

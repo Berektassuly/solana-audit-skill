@@ -14,6 +14,11 @@ const skillsDir = join(repoRoot, "skills");
 const incidentSkillDir = join(repoRoot, "skills", "solana-incident-response");
 const incidentSkillPath = join(incidentSkillDir, "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
+const skillFrontmatterFields = new Set(["name", "description", "license", "allowed-tools", "metadata", "compatibility"]);
+const skillNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const maxSkillNameLength = 64;
+const maxDescriptionLength = 1024;
+const maxCompatibilityLength = 500;
 
 let failures = 0;
 
@@ -55,6 +60,27 @@ function parseFrontmatter(content: string, label: string) {
 
   pass(`${label} has YAML frontmatter`);
   return fields;
+}
+
+function checkSkillFrontmatter(fields: Map<string, string>, label: string, expectedName: string) {
+  const keys = [...fields.keys()];
+  check(keys.every((key) => skillFrontmatterFields.has(key)), `${label} frontmatter uses only spec-compatible fields`);
+
+  const name = fields.get("name") ?? "";
+  check(Boolean(name), `${label} frontmatter has name`);
+  check(name === expectedName, `${label} name matches expected skill name`);
+  check(name.length <= maxSkillNameLength, `${label} name is at most ${maxSkillNameLength} characters`);
+  check(skillNamePattern.test(name), `${label} name is kebab-case without empty hyphen segments`);
+
+  const description = fields.get("description") ?? "";
+  check(Boolean(description), `${label} frontmatter has description`);
+  check(description.length <= maxDescriptionLength, `${label} description is at most ${maxDescriptionLength} characters`);
+  check(!/[<>]/.test(description), `${label} description does not contain angle brackets`);
+
+  const compatibility = fields.get("compatibility");
+  if (compatibility !== undefined) {
+    check(compatibility.length <= maxCompatibilityLength, `${label} compatibility is at most ${maxCompatibilityLength} characters`);
+  }
 }
 
 function localMarkdownLinks(content: string): string[] {
@@ -232,10 +258,7 @@ if (existsSync(skillPath)) {
   const frontmatter = parseFrontmatter(skill, "skill/SKILL.md");
 
   if (frontmatter) {
-    const allowed = new Set(["name", "description", "user-invocable"]);
-    const keys = [...frontmatter.keys()];
-    check(keys.every((key) => allowed.has(key)), "skill frontmatter uses only broadly compatible fields");
-    check(frontmatter.get("name") === "solana-audit", "skill name is solana-audit");
+    checkSkillFrontmatter(frontmatter, "skill/SKILL.md", "solana-audit");
 
     const description = frontmatter.get("description") ?? "";
     const triggerTerms = ["solana", "anchor", "audit", "signer", "pda", "cpi", "token-2022", "report", "remediation"];
@@ -295,10 +318,7 @@ if (existsSync(incidentSkillPath)) {
   const frontmatter = parseFrontmatter(incidentSkill, "skills/solana-incident-response/SKILL.md");
 
   if (frontmatter) {
-    const allowed = new Set(["name", "description"]);
-    const keys = [...frontmatter.keys()];
-    check(keys.every((key) => allowed.has(key)), "incident-response skill frontmatter uses only portable fields");
-    check(frontmatter.get("name") === "solana-incident-response", "incident-response skill name is solana-incident-response");
+    checkSkillFrontmatter(frontmatter, "skills/solana-incident-response/SKILL.md", "solana-incident-response");
 
     const description = frontmatter.get("description") ?? "";
     const triggerTerms = ["solana", "incident", "triage", "transaction", "timeline", "blast", "evidence", "containment"];
@@ -335,6 +355,14 @@ if (existsSync(skillsDir)) {
     if (!entry.isDirectory()) continue;
     const installableSkillDir = join(skillsDir, entry.name);
     if (installableSkillDir === incidentSkillDir) continue;
+    const installableSkillPath = join(installableSkillDir, "SKILL.md");
+    check(existsSync(installableSkillPath), `skills/${entry.name}/SKILL.md exists`);
+    if (existsSync(installableSkillPath)) {
+      const frontmatter = parseFrontmatter(readText(installableSkillPath), `skills/${entry.name}/SKILL.md`);
+      if (frontmatter) {
+        checkSkillFrontmatter(frontmatter, `skills/${entry.name}/SKILL.md`, entry.name);
+      }
+    }
     checkPackagedSkillLinks(installableSkillDir, `skills/${entry.name}`);
   }
 }

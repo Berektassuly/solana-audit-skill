@@ -83,6 +83,41 @@ interface SuiteResult {
   failures: { prompt: string; expected: boolean; got: boolean; reasoning: string }[];
 }
 
+function parseCaseIndex(args: string[]): number {
+  const caseFlagIndex = args.indexOf("--case");
+  if (caseFlagIndex === -1) return -1;
+
+  const rawCase = args[caseFlagIndex + 1];
+  if (!rawCase || rawCase.startsWith("--")) {
+    console.error("--case requires a 1-based case number.");
+    process.exit(1);
+  }
+
+  const caseNumber = Number(rawCase);
+  if (!Number.isInteger(caseNumber) || caseNumber < 1) {
+    console.error(`--case must be a positive integer, got: ${rawCase}`);
+    process.exit(1);
+  }
+
+  return caseNumber - 1;
+}
+
+function validateCaseIndex(caseIdx: number, suiteFilter: string | undefined) {
+  if (caseIdx < 0) return;
+
+  const suites = [
+    { filter: "trigger", name: "Skill trigger matching", cases: triggerCases },
+    { filter: "audit-plan", name: "Audit-plan behavior", cases: auditPlanCases },
+  ].filter((suite) => !suiteFilter || suite.filter === suiteFilter);
+
+  for (const suite of suites) {
+    if (caseIdx >= suite.cases.length) {
+      console.error(`--case ${caseIdx + 1} is out of range for ${suite.name}. Valid range: 1-${suite.cases.length}.`);
+      process.exit(1);
+    }
+  }
+}
+
 async function runSuite(
   client: Anthropic,
   suiteName: string,
@@ -274,9 +309,9 @@ async function main() {
   const args = process.argv.slice(2);
   const verbose = args.includes("--verbose");
   const suiteFilter = args.find((a) => ["trigger", "audit-plan"].includes(a));
-  const caseIdx = args.includes("--case")
-    ? parseInt(args[args.indexOf("--case") + 1], 10) - 1
-    : -1;
+  const caseIdx = parseCaseIndex(args);
+
+  validateCaseIndex(caseIdx, suiteFilter);
 
   if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN) {
     console.error("Missing Anthropic credentials. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN before running the evaluator suites.");
