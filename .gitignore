@@ -4,6 +4,7 @@ tests/node_modules/
 # Local environment files
 .env
 .env.*
+skills-lock.json
 
 # OS/editor noise
 .DS_Store

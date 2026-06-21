@@ -30,7 +30,7 @@ Solana historically felt resistant to token-transfer callbacks because classic S
 3. The hook executes with that extra-account context and can alter control flow at a point where the host protocol may still be reasoning about pre-transfer state or unchecked helper accounts.
 4. If the host protocol trusts that hook path too broadly, attacker-influenced extra accounts, stale state assumptions, or thinly guarded callback paths can turn a token transfer into an authorization, accounting, or liveness failure.
 
-Documented mechanics here are hook-mediated control-flow change and unvalidated extra-account resolution. Host-protocol reentry beyond that remains a realistic but thin-coverage, POC-style area rather than a confirmed in-the-wild exploit family.
+Documented mechanics here are hook-mediated control-flow change and unvalidated extra-account resolution. Host-protocol reentry beyond that remains a realistic design risk, but reviewers should require local code evidence before presenting it as a confirmed exploit path.
 
 ## Review Signals
 
@@ -69,9 +69,7 @@ Default account state, permanent delegate, and confidential-transfer proof failu
 
 ## Public Examples
 
-1. No confirmed large-loss in-the-wild transfer-hook exploit has been publicly disclosed as of June 2026. Current evidence comes from official documentation plus thin-coverage POC-style write-ups rather than public finding pages.
+1. No confirmed large-loss in-the-wild transfer-hook exploit has been publicly disclosed as of June 2026. Current stable evidence comes from official documentation rather than public finding pages.
 2. [Transfer Hook Interface](https://www.solana-program.com/docs/transfer-hook-interface) - current authoritative reference for Token-2022 transfer-hook wiring.
 3. [Configuring Extra Accounts](https://www.solana-program.com/docs/transfer-hook-interface/configuring-extra-accounts) - current authoritative reference for `ExtraAccountMeta` resolution and signer or writable account metadata.
 4. [Token-2022](https://www.solana-program.com/docs/token-2022) - authoritative reference for extension semantics, published audits, and the fact that integrators must explicitly choose to trust Token-2022 behavior.
-5. [CPI Reentrancy Is Back: A Solana Developer's Defense Playbook for Token-2022 Transfer Hooks](https://dev.to/ohmygod/cpi-reentrancy-is-back-a-solana-developers-defense-playbook-for-token-2022-transfer-hooks-4p5m) - POC-style secondary write-up showing how host protocols can expose callback-driven reentry or recursion hazards if they mutate state after `transfer_checked`.
-6. [Solana Token-2022 Security: The Hidden Attack Surface in Token Extensions Every DeFi Protocol Must Address](https://dev.to/ohmygod/solana-token-2022-security-the-hidden-attack-surface-in-token-extensions-every-defi-protocol-must-1jke) - POC-style secondary write-up focused on `ExtraAccountMetaList` validation and attacker-influenced hook context.

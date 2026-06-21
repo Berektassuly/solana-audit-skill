@@ -62,5 +62,5 @@ Wallets and clients often surface only the top-level program. That makes arbitra
 
 1. [Arbitrary CPI - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/arbitrary-cpi.md) - the archived official course demonstrates the exact trust-boundary failure.
 2. [Audius Claimable Tokens - "Arbitrary authority modification in SetAuthority" (Zellic public findings)](https://reports.zellic.io/findings) - the exploit relied on mismatched secp verification and consumed instruction data.
-3. [deBridge on Solana - Signature Verification Bypass (Neodyme)](https://neodyme.io/reports/debridge.pdf) - a public bridge review reinforcing verification-boundary risk.
+3. [deBridge on Solana - Signature Verification Bypass (Neodyme)](https://neodyme.io/reports/Debridge.pdf) - a public bridge review reinforcing verification-boundary risk.
 4. [X-Ray common pitfalls include arbitrary signed program invocation (Sec3)](https://www.sec3.dev/blog/xray) - Sec3 names this class directly in its Solana vulnerability corpus.

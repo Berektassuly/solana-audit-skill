@@ -21,7 +21,7 @@ This pack is grounded in public primary sources first, then in comparable public
 ### Neodyme
 
 1. [Solana Security Workshop](https://workshop.neodyme.io/) - structured exploit labs covering owner checks, signer checks, arithmetic, account confusion, PDAs, and closing logic.
-2. [deBridge Solana findings](https://neodyme.io/en/blog/lifting-the-bar-for-solana-cross-chain-security/) - signature-verification and cross-chain message validation write-up.
+2. [deBridge Solana report](https://neodyme.io/reports/Debridge.pdf) - signature-verification and cross-chain message validation review.
 3. [Marinade peer review](https://neodyme.io/reports/Marinade.pdf) - staking and reserve-management context.
 4. [Lido on Solana v2](https://neodyme.io/reports/Lido-2.pdf) - reserve and authority review material.
 
