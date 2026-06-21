@@ -17,6 +17,8 @@ Collect:
 4. governance or emergency controls
 5. release timeline and what is already deployed
 
+If the user is still resolving architecture decisions, run [pre-audit-design-review.md](pre-audit-design-review.md) before full finding work. Design-stage review should produce assumptions, a threat model, a pre-audit checklist, and unresolved questions; it does not count as an audit pass.
+
 ## Step 2: Map the attack surface
 
 Classify the reachable security surfaces:

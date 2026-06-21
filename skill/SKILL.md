@@ -14,8 +14,9 @@ Use this skill when the user asks for:
 - an Anchor vulnerability review
 - a taxonomy of real Solana vulnerabilities from public reports
 - exploit analysis for PDAs, signer checks, account validation, CPIs, or token integrations
-- audit-readiness planning, release-gate verdicts, or release-blocker checklists
+- audit-readiness planning, pre-audit design review, release-gate verdicts, or release-blocker checklists
 - Solana payment verification, merchant-server, or stablecoin checkout audit workflows
+- transaction signing-boundary, wallet prompt, backend signer, or pre-sign safety review
 - formal verification handoff, fuzz/property testing plans, or invariant checklists
 - report digestion and normalization across OtterSec, Zellic, Neodyme, Sec3, Trail of Bits, Immunefi, or official Solana security material
 
@@ -69,6 +70,7 @@ Bucket the request before analyzing details:
 - token, oracle, or governance integration risk
 - payment, merchant server, or stablecoin settlement boundary
 - client or wallet signing boundary
+- concrete transaction signing boundary
 - release process and operational controls
 
 ### 2. Build a taxonomy map
@@ -118,6 +120,7 @@ Escalate when any of the following are unclear:
 
 - upgrade authority, admin, or multisig trust model
 - nonstandard token program or Token-2022 extension mix
+- missing Token-2022 support policy for an accepted mint or asset class
 - PDA seed derivation source of truth
 - instruction introspection or signature-verification assumptions
 - off-chain signer or wallet flow that could change the threat model
@@ -143,10 +146,13 @@ Read these references only as needed:
 - Common false positives: [references/common-false-positives.md](references/common-false-positives.md)
 
 - Engagement workflow: [references/workflows/audit-engagement-workflow.md](references/workflows/audit-engagement-workflow.md)
+- Pre-audit design review: [references/workflows/pre-audit-design-review.md](references/workflows/pre-audit-design-review.md) when the user asks for design-stage risk reduction, threat modeling, audit readiness, unresolved design questions, or pre-audit artifacts before a full audit.
 - Finding writeups: [references/workflows/finding-writeup-workflow.md](references/workflows/finding-writeup-workflow.md)
 - Report normalization workflow: [references/workflows/report-to-taxonomy-workflow.md](references/workflows/report-to-taxonomy-workflow.md)
 - Release gate workflow: [references/workflows/release-gate-workflow.md](references/workflows/release-gate-workflow.md) when the user asks for pre-deploy, pre-upgrade, remediation signoff, release readiness, or machine-readable `PASS`/`FAIL`/`SKIP` gates.
 - Payment audit workflow: [references/workflows/payment-audit-workflow.md](references/workflows/payment-audit-workflow.md) when the user asks for Solana Pay, stablecoin checkout, payment verification, merchant-server, webhook, idempotency, or reconciliation review.
+- Transaction safety workflow: [references/workflows/transaction-safety-workflow.md](references/workflows/transaction-safety-workflow.md) when the user asks for decoded transaction review, wallet prompt review, serialized transaction review, backend signer policy, pre-sign safety, or autonomous action approval labels.
+- Token-2022 policy workflow: [references/workflows/token-2022-policy-workflow.md](references/workflows/token-2022-policy-workflow.md) when the user asks whether Token-2022 should be supported, which extensions are accepted or rejected, or how to review fee, hook, compatibility, and close-path evidence.
 - Formal verification handoff: [references/workflows/formal-verification-handoff.md](references/workflows/formal-verification-handoff.md) when the user asks for invariants, fuzz/property testing, proof handoff, verification planning, LiteSVM, Mollusk, SBF harnesses, QEDGen, Lean, or Kani-style proof work.
 - Final audit report template: [references/workflows/final-audit-report-template.md](references/workflows/final-audit-report-template.md) when the user asks for a final audit report, customer-facing report artifact, remediation summary, or confirmed-versus-residual-risk writeup.
 

@@ -7,6 +7,8 @@ description: Intake checklist for preparing a Solana security review so the audi
 
 Use this before reviewing code. The goal is to surface trust assumptions early.
 
+For design-stage risk reduction before a full audit, use [../workflows/pre-audit-design-review.md](../workflows/pre-audit-design-review.md) after this intake checklist. It turns unresolved architecture decisions into design assumptions, a threat model, a pre-audit checklist, and open questions.
+
 ## Core intake
 
 1. Identify every in-scope program ID and cluster.
@@ -40,3 +42,11 @@ Why it matters: oracle freshness, confidence, and manipulation assumptions often
 
 10. Enumerate client or wallet signing flows.
 Why it matters: boundary-layer bugs can turn a sound on-chain design into an unsafe end-user flow.
+
+## Design-stage intake
+
+11. Record the account model, PDA map, authority matrix, CPI map, token policy, and named economic invariants if they already exist.
+Why it matters: missing design artifacts should be resolved before auditors spend time reconstructing intent from code.
+
+12. Record unresolved design questions one at a time, with a recommended default answer and owner.
+Why it matters: design uncertainty should become an explicit audit-readiness task, not a hidden assumption inside a finding.

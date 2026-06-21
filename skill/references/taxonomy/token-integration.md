@@ -34,6 +34,8 @@ On Solana, the same business flow may touch classic SPL Token, Token-2022, wrapp
 2. Code assumes classic SPL Token semantics while accepting Token-2022 assets.
 3. Wrapped-mint logic copies freeze or delegate authority from an untrusted source without a trust-model decision.
 4. Mint metadata or ATA conventions are used as identity instead of the actual mint address.
+5. The integration has no explicit Token-2022 support policy marking extensions as supported, rejected, or residual risk.
+6. Accounting credits the requested transfer amount when transfer fees, hooks, or other nonstandard behavior can change the actual received amount.
 
 ## Anchor Notes
 
@@ -49,14 +51,16 @@ On Solana, the same business flow may touch classic SPL Token, Token-2022, wrapp
 
 ## Client/Wallet Implications
 
-Clients should detect the token program variant and extension mix before building transactions. User-visible "amount sent" may not equal "amount received" for fee-bearing mints, and memo-required destinations can fail transfers that look correct in the UI.
+Clients should detect the token program variant and extension mix before building transactions. User-visible "amount sent" may not equal "amount received" for fee-bearing mints, and memo-required destinations can fail transfers that look correct in the UI. Wallet and backend signer flows should treat unsupported extension mixes as a signing-boundary risk, not as a display-only problem.
 
 ## Mitigation Guidance
 
 1. Validate the actual mint address and token program ID.
 2. Decide whether Token-2022 is supported, then code every path for its extension semantics.
 3. For wrapped assets, document which source mint authorities are trusted and which are rejected.
-4. Add tests with transfer-fee mints, memo-required accounts, permanent delegates, and wrapped assets.
+4. For Token-2022, maintain an extension policy with `supported`, `rejected`, or `residual risk` per extension that can affect value, authority, liveness, display, or close behavior.
+5. Use pre/post balance deltas when transfer fees or nonstandard token behavior can alter the received amount.
+6. Add tests with wrong token program variants, unsupported extension mixes, transfer-fee mints, transfer-hook mints, memo-required accounts, default frozen accounts, permanent delegates, close paths with withheld fees, and wrapped assets.
 
 ## Public Examples
 

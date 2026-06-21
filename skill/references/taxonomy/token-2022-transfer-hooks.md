@@ -64,6 +64,7 @@ Clients and wallets should surface that a token transfer may call an external ho
 3. Mutate critical protocol state before the transfer CPI, or revalidate it after the hook returns before continuing.
 4. Treat writable or signer-capable extra accounts as a separate review surface and test adverse paths explicitly.
 5. Budget for hook-induced CPI depth and failure propagation, and reject mints whose hook behavior the protocol cannot reason about.
+6. Record hook-bearing mints in the Token-2022 support policy as supported, rejected, or residual risk before treating them as accepted assets.
 
 Default account state, permanent delegate, and confidential-transfer proof failures stay in their own classes unless a hook callback or hook account-resolution path is the first boundary crossed.
 

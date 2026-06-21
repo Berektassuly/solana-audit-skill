@@ -44,7 +44,13 @@ Why it matters: even a trusted target becomes dangerous if privileged accounts a
 E1. Verify token program variant, mint identity, token-account relationships, and extension assumptions.
 Why it matters: transfer fees, memo-required accounts, metadata pointers, freeze authority, and permanent delegate semantics change the threat model.
 
-E2. Verify oracle freshness, confidence, and manipulability.
+E2. Verify the Token-2022 support policy when any accepted mint may use Token-2022.
+Why it matters: the integration should explicitly mark extensions as supported, rejected, or residual risk before value movement or accounting.
+
+E3. Verify fee-bearing and hook-bearing mints with balance-delta and callback-aware tests.
+Why it matters: gross sent may not equal net received, and a transfer can introduce external hook execution or liveness failure.
+
+E4. Verify oracle freshness, confidence, and manipulability.
 Why it matters: price-dependent bugs often combine stale or attacker-influenced inputs with correct-looking business logic.
 
 ## F. Arithmetic and invariants
