@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "tsx static-validation.ts && tsx golden-validation.ts && tsx behavioral-golden.ts",
+    "test": "tsx static-validation.ts && tsx golden-validation.ts && tsx behavioral-golden.ts && tsx e2e-skill-routing.ts",
     "test:anthropic": "tsx run.ts",
     "test:anthropic:verbose": "tsx run.ts --verbose",
     "eval": "tsx run.ts"
