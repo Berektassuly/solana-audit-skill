@@ -168,7 +168,10 @@ The taxonomy and workflows are grounded in public material from:
 - [Neodyme reports and Solana Security Workshop](https://workshop.neodyme.io/)
 - [Sec3 / Soteria blogs and X-Ray material](https://www.sec3.dev/blog)
 - [Immunefi bug fix reviews and disclosures](https://immunefi.com/blog/bug-fix-reviews/)
-- [Official Solana Program Security material](https://solana.com/developers/courses/program-security)
+- [Archived Solana Program Security course material](https://github.com/solana-foundation/developer-content/tree/main/content/courses/program-security)
+- [Blueshift Program Security](https://learn.blueshift.gg/en/courses/program-security/introduction)
+- [Anchor security exploits and Sealevel examples](https://www.anchor-lang.com/docs/references/security-exploits)
+- [Anza security audits](https://github.com/anza-xyz/security-audits)
 - [Official Solana ecosystem security material](https://solana.com/news/solana-ecosystem-security)
 
 See [`skill/references/resources.md`](skill/references/resources.md) for the source index.

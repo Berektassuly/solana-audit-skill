@@ -60,7 +60,7 @@ Lifecycle bugs often surface operationally first. A client may see an account th
 
 ## Public Examples
 
-1. [Reinitialization Attacks - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/reinitialization-attacks) - canonical example of overwriting existing state.
-2. [Closing Accounts - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/closing-accounts) - the official course covers secure close behavior and revival risk.
+1. [Reinitialization Attacks - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/reinitialization-attacks.md) - canonical example of overwriting existing state.
+2. [Closing Accounts - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/closing-accounts.md) - the archived official course covers secure close behavior and revival risk.
 3. [The Story of the Curious Rent Thief (Osec)](https://osec.io/blog/2022-08-19-solend-rent-thief/) - a real-world lifecycle gap between account creation and initialization.
-4. [PDA sharing and lifecycle lessons in the Solana Program Security course](https://solana.com/developers/courses/program-security) - comparable official material for closure and re-use hazards.
+4. [PDA sharing and lifecycle lessons in the archived Solana Program Security course](https://github.com/solana-foundation/developer-content/tree/main/content/courses/program-security) - comparable archived official material for closure and re-use hazards.

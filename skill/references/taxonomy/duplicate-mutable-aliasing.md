@@ -58,5 +58,5 @@ Clients may accidentally hide this bug if they always derive distinct accounts. 
 
 ## Public Examples
 
-1. [Duplicate Mutable Accounts - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/duplicate-mutable-accounts) - the canonical public example of the class.
+1. [Duplicate Mutable Accounts - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/duplicate-mutable-accounts.md) - the canonical public example of the class.
 2. [A Hitchhiker's Guide to Solana Program Security - Duplicate Mutable Accounts section](https://www.helius.dev/blog/a-hitchhikers-guide-to-solana-program-security) - a second Solana-specific public corpus entry that explains the exploit shape and mitigation.

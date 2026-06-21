@@ -60,7 +60,7 @@ If the client derives PDAs differently from the program, bugs can look intermitt
 
 ## Public Examples
 
-1. [Bump Seed Canonicalization - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/bump-seed-canonicalization) - documents why noncanonical bumps break one-to-one PDA mapping.
-2. [PDA Sharing - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/pda-sharing) - shows how a shared PDA signer can let one user withdraw assets that belong to another.
+1. [Bump Seed Canonicalization - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/bump-seed-canonicalization.md) - documents why noncanonical bumps break one-to-one PDA mapping.
+2. [PDA Sharing - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/pda-sharing.md) - shows how a shared PDA signer can let one user withdraw assets that belong to another.
 3. [Security of Solana Smart Contracts: Why You Should Always Validate PDA Bump Seeds (Sec3)](https://www.sec3.dev/blog/pda-bump-seeds) - a direct Sec3 write-up on the vulnerability class.
 4. [Exploring Solana Core Part 1 - Neodyme](https://neodyme.io/en/blog/solana_core_1/) - explains how PDA signer privileges become dangerous when the derived authority domain is too broad.

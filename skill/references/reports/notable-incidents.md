@@ -39,7 +39,7 @@ Source: [Sec3 recent hacks review](https://www.sec3.dev/blog/recent-hacks)
 
 ## Raydium Tick Manipulation
 
-Source: [Immunefi bug fix review](https://immunefi.com/blog/all/raydium-tick-manipulation-bug-fix-review/)
+Source: [Immunefi bug fix review](https://immunefi.com/blog/bug-fix-reviews/raydium-tick-manipulation-bugfix-review/)
 
 1. Primary class: [oracle-pricing-mev](../taxonomy/oracle-pricing-mev.md)
 2. Secondary class: [state-machine-invariants](../taxonomy/state-machine-invariants.md)

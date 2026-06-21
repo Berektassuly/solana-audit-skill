@@ -45,11 +45,18 @@ This pack is grounded in public primary sources first, then in comparable public
 3. [Squads V4 public report entry](https://github.com/trailofbits/publications/blob/master/reviews/2023-10-squadsv4-securityreview.pdf) - multisig and governance review source.
 4. [ZetaChain Solana Gateway public report entry](https://github.com/trailofbits/publications/blob/master/reviews/2025-01-zetachain-solana-gateway-security-review.pdf) - bridge-boundary review source.
 
+### Anza and Solana program audits
+
+1. [Anza security audits](https://github.com/anza-xyz/security-audits) - maintained repository of public audits for Anza and Solana ecosystem infrastructure.
+2. [Token-2022 docs](https://www.solana-program.com/docs/token-2022) - current authoritative Token-2022 extension semantics and audit links.
+3. [Transfer Hook Interface docs](https://www.solana-program.com/docs/transfer-hook-interface) - current authoritative transfer-hook interface documentation.
+4. [Configuring Extra Accounts](https://www.solana-program.com/docs/transfer-hook-interface/configuring-extra-accounts) - current authoritative reference for `ExtraAccountMeta` account resolution.
+
 ### Immunefi and disclosed incidents
 
 1. [Bug Fix Reviews archive](https://immunefi.com/blog/bug-fix-reviews/) - public disclosure hub.
 2. [Raydium Tick Manipulation](https://immunefi.com/blog/bug-fix-reviews/raydium-tick-manipulation-bugfix-review/) - concentrated-liquidity price boundary failure.
-3. [Raydium Liquidity Drain](https://immunefi.com/blog/bug-fix-reviews/raydium-liquidity-drain-bugfix-review/) - pool accounting and LP redemption boundary failure.
+3. [Raydium Liquidity Drain](https://immunefi.com/blog/all/raydium-liquidity-drain-bug-fix-review/) - pool accounting and LP redemption boundary failure.
 
 ## Ecosystem programs and tooling
 
@@ -68,9 +75,12 @@ This pack is grounded in public primary sources first, then in comparable public
 
 These are useful when a category is real but public audit pages are sparse.
 
-1. [Solana Program Security course](https://solana.com/developers/courses/program-security) - official labs for account validation, signer auth, PDAs, reinitialization, revival, and duplicate mutable accounts.
-2. [Token-2022 docs](https://www.solana-program.com/docs/token-2022) - official extension semantics and audit links.
-3. Anchor v1 migration guidance used while generating this pack - a local source-of-truth for duplicate mutable aliasing hardening and lifecycle checks, referenced here as methodology rather than as packaged content.
+1. [Solana Program Security course archive](https://github.com/solana-foundation/developer-content/tree/main/content/courses/program-security) - archived official labs for account validation, signer auth, PDAs, reinitialization, revival, and duplicate mutable accounts. The older `solana.com/developers/courses/program-security` links redirect here.
+2. [Blueshift Program Security](https://learn.blueshift.gg/en/courses/program-security/introduction) - maintained Solana program-security course covering ownership, access control, and CPI fundamentals.
+3. [Anchor security exploits](https://www.anchor-lang.com/docs/references/security-exploits) - maintained Anchor reference that routes to current Sealevel attack examples.
+4. [Coral Sealevel attacks repository](https://github.com/coral-xyz/sealevel-attacks) - maintained runnable examples for common Solana program security mistakes.
+5. [Ackee Solana common attack vectors](https://github.com/Ackee-Blockchain/solana-common-attack-vectors) - maintained comparable corpus for account validation, signer, PDA, CPI, and arithmetic review patterns.
+6. Anchor v1 migration guidance used while generating this pack - a local source-of-truth for duplicate mutable aliasing hardening and lifecycle checks, referenced here as methodology rather than as packaged content.
 
 ## How to use this source index
 

@@ -71,5 +71,5 @@ Client code should not assume that a successful simulation proves account legiti
 
 1. [Wormhole - missing account validation in a bridge path, summarized by Sec3](https://www.sec3.dev/blog/recent-hacks) - the post-mortem classifies Wormhole as a fake-account validation failure.
 2. [Cashio - fake collateral and missing account validation, summarized by Sec3](https://www.sec3.dev/blog/recent-hacks) - the exploit relied on crafted accounts passing insufficient validation.
-3. [Owner Checks - official Solana Program Security lesson](https://solana.com/developers/courses/program-security/owner-checks) - the official course shows why owner validation is the first line of defense.
-4. [Type Cosplay - official Solana Program Security lesson](https://solana.com/id/developers/courses/program-security/type-cosplay) - demonstrates how same-shaped account data can be substituted if type validation is weak.
+3. [Owner Checks - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/owner-checks.md) - the archived official course shows why owner validation is the first line of defense.
+4. [Type Cosplay - archived Solana Program Security lesson](https://github.com/solana-foundation/developer-content/blob/main/content/courses/program-security/type-cosplay.md) - demonstrates how same-shaped account data can be substituted if type validation is weak.
