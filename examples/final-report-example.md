@@ -59,6 +59,12 @@ The team added mint identity, owner, token program, and vault-state relationship
 Verification:
 Regression tests now reject a wrong reward mint and an unsupported Token-2022 extension before CPI.
 
+### Hypotheses Versus Confirmed Findings
+
+| ID | Status | Question | Evidence | Outcome |
+|---|---|---|---|---|
+| H-01 | Resolved Hypothesis | Is the vault PDA bump accepted from user input? | Code review and ProgramTest-style PDA assertion | Stored bump is recomputed before signing |
+
 ### Remediation Status
 
 | ID | Team Response | Fix Commit | Verification |

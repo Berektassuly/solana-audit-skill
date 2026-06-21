@@ -8,7 +8,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 const skillPath = join(repoRoot, "skill", "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
+const demoPath = join(repoRoot, "DEMO.md");
 const examplesDir = join(repoRoot, "examples");
+const agentsDir = join(repoRoot, "agents");
+const rulesDir = join(repoRoot, "rules");
+const commandsDir = join(repoRoot, "commands");
 
 let failures = 0;
 
@@ -141,12 +145,21 @@ const transactionSafetyWorkflow = join(repoRoot, "skill", "references", "workflo
 const tokenPolicyWorkflow = join(repoRoot, "skill", "references", "workflows", "token-2022-policy-workflow.md");
 const preAuditDesignWorkflow = join(repoRoot, "skill", "references", "workflows", "pre-audit-design-review.md");
 requireFile(formalWorkflow, "formal-verification-handoff.md");
-requireFile(reportWorkflow, "final-audit-report-template.md");
+if (requireFile(reportWorkflow, "final-audit-report-template.md")) {
+  const content = readText(reportWorkflow);
+  for (const status of ["Confirmed", "Hypothesis", "Residual Risk"]) {
+    requireIncludes(content, status, `final-audit-report-template.md separates status: ${status}`);
+  }
+}
 if (requireFile(releaseGateWorkflow, "release-gate-workflow.md")) {
   const content = readText(releaseGateWorkflow);
   for (const term of ["PASS", "FAIL", "SKIP", "authority", "build", "compute", "migration"]) {
     requireIncludes(content, term, `release-gate-workflow.md includes ${term}`);
   }
+  check(
+    /missing evidence[\s\S]*mark it `FAIL`/i.test(content) || /missing required release evidence[\s\S]*`FAIL`/i.test(content),
+    "release-gate-workflow.md treats missing required release evidence as FAIL",
+  );
 }
 if (requireFile(paymentAuditWorkflow, "payment-audit-workflow.md")) {
   const content = readText(paymentAuditWorkflow);
@@ -159,6 +172,11 @@ if (requireFile(transactionSafetyWorkflow, "transaction-safety-workflow.md")) {
   for (const term of ["AUTONOMOUS_OK", "CONFIRM_REQUIRED", "NEVER_AUTO_SIGN", "NEEDS_MORE_INFO", "simulation", "backend signer"]) {
     requireIncludes(content, term, `transaction-safety-workflow.md includes ${term}`);
   }
+  requireIncludes(
+    content,
+    "Decision: AUTONOMOUS_OK | CONFIRM_REQUIRED | NEVER_AUTO_SIGN | NEEDS_MORE_INFO",
+    "transaction-safety-workflow.md emits one of the four transaction labels",
+  );
 }
 if (requireFile(tokenPolicyWorkflow, "token-2022-policy-workflow.md")) {
   const content = readText(tokenPolicyWorkflow);
@@ -185,6 +203,32 @@ if (requireFile(examplesDir, "examples/ directory")) {
     JSON.stringify(markdownFiles) === JSON.stringify([...requiredExamples].sort()),
     `examples/ contains exactly required files: ${requiredExamples.join(", ")}`,
   );
+}
+
+if (requireFile(demoPath, "DEMO.md")) {
+  const content = readText(demoPath);
+  for (const heading of [
+    "User Prompt",
+    "References Loaded",
+    "Finding Output",
+    "Verification",
+    "Final Report Excerpt",
+  ]) {
+    requireHeading(content, "DEMO.md", heading);
+  }
+
+  for (const term of ["Evidence", "Impact", "Fix", "Verification"]) {
+    requireIncludes(content, term, `DEMO.md includes required finding term: ${term}`);
+  }
+
+  requireIncludes(content, "Status: Hypothesis", "DEMO.md labels finding status");
+  requireIncludes(content, "Taxonomy mapping", "DEMO.md maps taxonomy");
+  check(
+    /false-positive|uncertainty/i.test(content),
+    "DEMO.md includes false-positive or uncertainty notes",
+  );
+  forbidPlaceholders(content, "DEMO.md");
+  forbidSecretMaterial(content, "DEMO.md");
 }
 
 const exampleContracts: Record<string, string[]> = {
@@ -282,14 +326,117 @@ if (existsSync(finalReport)) {
   for (const label of ["Evidence:", "Impact:", "Exploit Path:", "Fix:", "Verification:"]) {
     requireIncludes(content, label, `final-report-example.md detailed finding includes label: ${label}`);
   }
-  for (const status of ["Confirmed", "Residual Risk", "Resolved"]) {
+  for (const status of ["Confirmed", "Hypothesis", "Residual Risk", "Resolved"]) {
     requireIncludes(content, status, `final-report-example.md distinguishes status: ${status}`);
+  }
+}
+
+const requiredAgents = ["audit-lead.md", "finding-writer.md"];
+for (const fileName of requiredAgents) {
+  const path = join(agentsDir, fileName);
+  if (!requireFile(path, `agents/${fileName}`)) continue;
+
+  const content = readText(path);
+  requireIncludes(content, "skill/SKILL.md", `agents/${fileName} routes to skill/SKILL.md`);
+  forbidPlaceholders(content, `agents/${fileName}`);
+}
+
+const requiredRules = ["audit-claim-discipline.md", "no-secret-material.md"];
+for (const fileName of requiredRules) {
+  const path = join(rulesDir, fileName);
+  if (!requireFile(path, `rules/${fileName}`)) continue;
+
+  const content = readText(path);
+  forbidPlaceholders(content, `rules/${fileName}`);
+}
+
+const requiredCommands = [
+  "audit-release-gate.md",
+  "audit-transaction-safety.md",
+  "audit-upgrade-migration.md",
+];
+for (const fileName of requiredCommands) {
+  const path = join(commandsDir, fileName);
+  if (!requireFile(path, `commands/${fileName}`)) continue;
+
+  const content = readText(path);
+  requireIncludes(content, "../skill/SKILL.md", `commands/${fileName} routes to ../skill/SKILL.md`);
+  forbidPlaceholders(content, `commands/${fileName}`);
+}
+
+const releaseGateCommand = join(commandsDir, "audit-release-gate.md");
+if (existsSync(releaseGateCommand)) {
+  const content = readText(releaseGateCommand);
+  requireIncludes(
+    content,
+    "../skill/references/workflows/release-gate-workflow.md",
+    "audit-release-gate command routes to release-gate workflow",
+  );
+  for (const term of ["PASS", "FAIL", "SKIP"]) {
+    requireIncludes(content, term, `audit-release-gate command requires ${term}`);
+  }
+  requireIncludes(content, "GATE: PASS|FAIL", "audit-release-gate command requires GATE: PASS|FAIL output");
+  requireIncludes(
+    content,
+    "Every `FAIL` must map to a blocker, finding, or missing required evidence",
+    "audit-release-gate command maps FAIL to blocker, finding, or missing evidence",
+  );
+  requireIncludes(
+    content,
+    "Missing required evidence is `FAIL`, not `SKIP`",
+    "audit-release-gate command says missing required evidence is FAIL, not SKIP",
+  );
+}
+
+const transactionCommand = join(commandsDir, "audit-transaction-safety.md");
+if (existsSync(transactionCommand)) {
+  const content = readText(transactionCommand);
+  requireIncludes(
+    content,
+    "../skill/references/workflows/transaction-safety-workflow.md",
+    "audit-transaction-safety command routes to transaction safety workflow",
+  );
+  requireIncludes(content, "Return exactly one decision label", "audit-transaction-safety command requires exactly one label");
+  for (const label of ["AUTONOMOUS_OK", "CONFIRM_REQUIRED", "NEVER_AUTO_SIGN", "NEEDS_MORE_INFO"]) {
+    requireIncludes(content, label, `audit-transaction-safety command requires label: ${label}`);
+  }
+  requireIncludes(
+    content,
+    "Decision: AUTONOMOUS_OK | CONFIRM_REQUIRED | NEVER_AUTO_SIGN | NEEDS_MORE_INFO",
+    "audit-transaction-safety command output emits one of four labels",
+  );
+  for (const term of ["account deltas", "signer", "authority", "token", "CPI", "policy-risk"]) {
+    requireIncludes(content, term, `audit-transaction-safety command reviews ${term}`);
+  }
+  requireIncludes(content, "Simulation success is evidence, not approval", "audit-transaction-safety command treats simulation as evidence");
+}
+
+const upgradeCommand = join(commandsDir, "audit-upgrade-migration.md");
+if (existsSync(upgradeCommand)) {
+  const content = readText(upgradeCommand).toLowerCase();
+  for (const term of ["account layout", "migration", "authority", "simulation", "rollback"]) {
+    requireIncludes(content, term, `audit-upgrade-migration command mentions ${term}`);
+  }
+  for (const ref of [
+    "upgrade-admin-governance",
+    "lifecycle-reinit-close-revival",
+    "state-machine-invariants",
+    "release-gate-workflow",
+    "formal-verification-handoff",
+  ]) {
+    requireIncludes(content, ref, `audit-upgrade-migration command routes to ${ref}`);
   }
 }
 
 if (requireFile(readmePath, "README.md")) {
   const readme = readText(readmePath).toLowerCase();
   for (const phrase of [
+    "demo.md",
+    "agents/",
+    "rules/",
+    "audit-release-gate",
+    "audit-transaction-safety",
+    "audit-upgrade-migration",
     "pre-audit design review",
     "release-gate",
     "payment-audit",

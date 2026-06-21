@@ -6,6 +6,8 @@ An evidence-backed Agent Skill for Solana security reviews, audit planning, expl
 
 In 60 seconds, a judge should see the prompt, the references loaded, the output contract, and one compact finding with Evidence, Impact, Fix, and Verification. This repo keeps that path short while preserving the deeper taxonomy under `skill/references/`.
 
+Start with [`DEMO.md`](DEMO.md) for the compact judge-facing path from user prompt -> references loaded -> finding -> verification -> report excerpt.
+
 ## What Problem This Solves
 
 Solana audits are easy to flatten into generic lists like "check signers" or "validate accounts." That misses the part reviewers actually need: the exploit path, the Solana account model boundary that failed, the public evidence behind the class, and the smallest verification step that proves a fix works.
@@ -21,6 +23,12 @@ This repository packages that audit lifecycle into a compact Agent Skill. It hel
 - review client signing, backend signer, concrete transaction, payment verification, and release-readiness boundaries without signing or sending transactions
 - produce final audit report artifacts from confirmed findings, resolved hypotheses, and residual risk
 - digest public Solana audit reports into a normalized taxonomy
+
+The intended lifecycle is:
+
+```text
+pre-audit -> finding -> remediation verification -> release gate -> formal verification handoff -> final report
+```
 
 ## Why This Is Not Just Another Checklist
 
@@ -42,6 +50,8 @@ The novelty is the lifecycle plus evidence discipline: a normalized public-repor
 - Adds a final audit report template that separates confirmed findings, resolved hypotheses, residual risk, remediation status, and limitations.
 
 ## 60-Second Judge Demo
+
+See [`DEMO.md`](DEMO.md) for the canonical short demo with user prompt, exact references loaded, finding output, verification, final report excerpt, and why the flow matters.
 
 User prompt:
 
@@ -83,22 +93,32 @@ Verification:
 Add regression tests that provide a wrong mint, wrong token program variant, and unsupported Token-2022 extension mix through `remaining_accounts`; each test should reject before CPI and before state mutation.
 ```
 
-For complete prompt-to-artifact examples, see `examples/audit-plan-example.md`, `examples/finding-writeup-example.md`, and `examples/final-report-example.md`.
+For complete prompt-to-artifact examples, see [`DEMO.md`](DEMO.md), `examples/audit-plan-example.md`, `examples/finding-writeup-example.md`, and `examples/final-report-example.md`.
 
 ## Repository Structure
 
 ```text
 solana-audit-skill/
 |-- AGENTS.md
+|-- DEMO.md
 |-- LICENSE
 |-- README.md
 |-- install.sh
+|-- agents/
+|   |-- audit-lead.md
+|   `-- finding-writer.md
 |-- commands/
-|   `-- audit-solana.md
+|   |-- audit-release-gate.md
+|   |-- audit-solana.md
+|   |-- audit-transaction-safety.md
+|   `-- audit-upgrade-migration.md
 |-- examples/
 |   |-- audit-plan-example.md
 |   |-- finding-writeup-example.md
 |   `-- final-report-example.md
+|-- rules/
+|   |-- audit-claim-discipline.md
+|   `-- no-secret-material.md
 |-- skill/
 |   |-- SKILL.md
 |   `-- references/
@@ -235,13 +255,23 @@ Write a remediation verification plan for these Solana findings.
 Create a final audit report from these confirmed findings.
 ```
 
-This repo also ships a command file:
+This repo also ships command files:
 
 ```text
 commands/audit-solana.md
+commands/audit-release-gate.md
+commands/audit-transaction-safety.md
+commands/audit-upgrade-migration.md
 ```
 
-In command-aware agent setups, expose it as `/audit-solana` and have it route to `skill/SKILL.md`.
+In command-aware agent setups, expose them as `/audit-solana`, `/audit-release-gate`, `/audit-transaction-safety`, and `/audit-upgrade-migration`. Each command routes to `skill/SKILL.md` and focused workflow references instead of duplicating the skill body.
+
+Canonical agent and rule surfaces are available for setups that auto-load role or policy files:
+
+- `agents/audit-lead.md`: scope, attack-surface classification, minimal reference loading, and handoff routing.
+- `agents/finding-writer.md`: evidence-backed, report-ready findings with uncertainty preserved.
+- `rules/audit-claim-discipline.md`: no unsupported findings or exploit claims.
+- `rules/no-secret-material.md`: no seed phrases, private keys, wallet exports, keypair file contents, or signing access.
 
 ## Additional Skill: Solana Incident Response
 
@@ -254,6 +284,8 @@ skills/solana-incident-response/SKILL.md
 Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It is a bonus adjacent workflow, not the bounty skill. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow. The canonical bounty skill remains `skill/SKILL.md`; `skills/solana-incident-response` is supplemental.
 
 ## Examples
+
+The compact judge path lives in [`DEMO.md`](DEMO.md).
 
 The `examples/` directory contains prompt-to-artifact contracts for:
 
@@ -302,7 +334,7 @@ cd tests
 npm.cmd test
 ```
 
-`npm test` runs `tests/static-validation.ts` and the no-credential golden validation in `tests/golden-validation.ts`. Static validation checks skill frontmatter, packaged local links, required references, the installer smoke path, command files, README coverage, Skills CLI documentation, and placeholder hygiene. Golden validation checks the new workflow links, prompt-to-artifact examples, required headings, output-contract terms, safety constraints, and README coverage.
+`npm test` runs `tests/static-validation.ts` and the no-credential golden validation in `tests/golden-validation.ts`. Static validation checks skill frontmatter, packaged local links, required references, the installer smoke path, command files, README coverage, Skills CLI documentation, and placeholder hygiene. Golden validation checks the demo, agents, rules, command routing, release-gate labels, transaction-safety labels, final report status separation, prompt-to-artifact examples, required headings, output-contract terms, safety constraints, and README coverage.
 
 ### Optional Model-Backed Evaluator
 

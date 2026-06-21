@@ -14,6 +14,9 @@ const skillsDir = join(repoRoot, "skills");
 const incidentSkillDir = join(repoRoot, "skills", "solana-incident-response");
 const incidentSkillPath = join(incidentSkillDir, "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
+const demoPath = join(repoRoot, "DEMO.md");
+const agentsDir = join(repoRoot, "agents");
+const rulesDir = join(repoRoot, "rules");
 const skillFrontmatterFields = new Set([
   "name",
   "description",
@@ -385,6 +388,12 @@ if (existsSync(skillsDir)) {
 check(existsSync(readmePath), "README.md exists");
 if (existsSync(readmePath)) {
   const readme = readText(readmePath).toLowerCase();
+  check(readme.includes("demo.md"), "README links the judge demo");
+  check(readme.includes("agents/"), "README documents canonical agents");
+  check(readme.includes("rules/"), "README documents canonical rules");
+  check(readme.includes("audit-release-gate"), "README documents audit-release-gate command");
+  check(readme.includes("audit-transaction-safety"), "README documents audit-transaction-safety command");
+  check(readme.includes("audit-upgrade-migration"), "README documents audit-upgrade-migration command");
   check(readme.includes("what problem this solves"), "README explains the problem solved");
   check(readme.includes("installation"), "README documents installation");
   check(readme.includes("solana ai kit integration"), "README documents Solana AI Kit integration");
@@ -418,13 +427,37 @@ if (existsSync(installPath)) {
 }
 
 const commandsDir = join(repoRoot, "commands");
-const auditCommandPath = join(commandsDir, "audit-solana.md");
-check(existsSync(auditCommandPath), "commands/audit-solana.md exists");
-if (existsSync(auditCommandPath)) {
-  const command = readText(auditCommandPath);
-  check(command.includes("../skill/SKILL.md"), "audit-solana command routes to skill/SKILL.md");
-  const commandFrontmatter = parseFrontmatter(command, "commands/audit-solana.md");
-  check(Boolean(commandFrontmatter?.get("description")), "audit-solana command has description frontmatter");
+const requiredCommands = [
+  "audit-solana.md",
+  "audit-release-gate.md",
+  "audit-transaction-safety.md",
+  "audit-upgrade-migration.md",
+];
+for (const fileName of requiredCommands) {
+  const commandPath = join(commandsDir, fileName);
+  check(existsSync(commandPath), `commands/${fileName} exists`);
+  if (!existsSync(commandPath)) continue;
+
+  const command = readText(commandPath);
+  check(command.includes("../skill/SKILL.md"), `${fileName} command routes to skill/SKILL.md`);
+  const commandFrontmatter = parseFrontmatter(command, `commands/${fileName}`);
+  check(Boolean(commandFrontmatter?.get("description")), `${fileName} command has description frontmatter`);
+}
+
+check(existsSync(demoPath), "DEMO.md exists");
+
+const requiredAgents = ["audit-lead.md", "finding-writer.md"];
+for (const fileName of requiredAgents) {
+  const agentPath = join(agentsDir, fileName);
+  check(existsSync(agentPath), `agents/${fileName} exists`);
+  if (existsSync(agentPath)) {
+    check(readText(agentPath).includes("skill/SKILL.md"), `agents/${fileName} routes to skill/SKILL.md`);
+  }
+}
+
+const requiredRules = ["audit-claim-discipline.md", "no-secret-material.md"];
+for (const fileName of requiredRules) {
+  check(existsSync(join(rulesDir, fileName)), `rules/${fileName} exists`);
 }
 
 const rootShimPath = join(repoRoot, "SKILL.md");
