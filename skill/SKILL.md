@@ -1,6 +1,7 @@
 ---
 name: solana-audit
-description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, or generate audit-readiness, release-blocker, remediation, and final-report workflows.
+description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, plan formal verification or invariant testing, or generate audit-readiness, release-blocker, remediation, and final-report workflows.
+user-invocable: true
 ---
 
 # Solana Audit Skill
@@ -14,6 +15,7 @@ Use this skill when the user asks for:
 - a taxonomy of real Solana vulnerabilities from public reports
 - exploit analysis for PDAs, signer checks, account validation, CPIs, or token integrations
 - audit-readiness planning or release-blocker checklists
+- formal verification handoff, fuzz/property testing plans, or invariant checklists
 - report digestion and normalization across OtterSec, Zellic, Neodyme, Sec3, Trail of Bits, Immunefi, or official Solana security material
 
 ## When not to use this skill
@@ -141,6 +143,8 @@ Read these references only as needed:
 - Engagement workflow: [references/workflows/audit-engagement-workflow.md](references/workflows/audit-engagement-workflow.md)
 - Finding writeups: [references/workflows/finding-writeup-workflow.md](references/workflows/finding-writeup-workflow.md)
 - Report normalization workflow: [references/workflows/report-to-taxonomy-workflow.md](references/workflows/report-to-taxonomy-workflow.md)
+- Formal verification handoff: [references/workflows/formal-verification-handoff.md](references/workflows/formal-verification-handoff.md) when the user asks for invariants, fuzz/property testing, proof handoff, verification planning, LiteSVM, Mollusk, SBF harnesses, QEDGen, Lean, or Kani-style proof work.
+- Final audit report template: [references/workflows/final-audit-report-template.md](references/workflows/final-audit-report-template.md) when the user asks for a final audit report, customer-facing report artifact, remediation summary, or confirmed-versus-residual-risk writeup.
 
 - Intake checklist: [references/checklists/pre-audit-intake.md](references/checklists/pre-audit-intake.md)
 - Program review checklist: [references/checklists/program-review-checklist.md](references/checklists/program-review-checklist.md)
