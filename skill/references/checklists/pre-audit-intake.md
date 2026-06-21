@@ -17,8 +17,8 @@ Why it matters: many Solana risks depend on upgrade authority, deployed address,
 2. Record the framework and runtime mix.
 Why it matters: Anchor, native Rust, and client-side signing each produce different review obligations.
 
-3. List every external dependency.
-Why it matters: Token, Token-2022, stake pool, oracle, bridge, and multisig assumptions often dominate the attack surface.
+3. List every external dependency, including operator identity, upgrade authority, deployment provenance, and the evidence source for each external program, oracle, keeper, relayer, bridge, or multisig dependency.
+Why it matters: code review and operator trust are separate. Unresolved operator identity is a residual risk or release blocker when the integration depends on that counterparty.
 
 4. Identify every authority.
 Why it matters: upgrade authority, pause authority, mint authority, freeze authority, and multisig signers define the blast radius of admin mistakes.
@@ -34,8 +34,8 @@ Why it matters: PDA derivation mistakes are easier to catch before code review i
 7. Enumerate all CPI targets.
 Why it matters: arbitrary CPI findings usually come from unclear external program assumptions.
 
-8. Enumerate token and mint assumptions.
-Why it matters: many integrations silently assume classic SPL Token behavior and break on Token-2022 extensions.
+8. Enumerate accepted token and mint assumptions for collateral, settlement, rewards, payments, or treasury assets.
+Why it matters: mint identity, token program, mint authority, freeze authority, permanent delegate, metadata authority, close authority, and Token-2022 extension mix define the security model. Liquidity, holder concentration, and venue data are intake context, not confirmed program vulnerabilities by themselves.
 
 9. Enumerate oracle and pricing sources.
 Why it matters: oracle freshness, confidence, and manipulation assumptions often determine whether an economic bug is real.

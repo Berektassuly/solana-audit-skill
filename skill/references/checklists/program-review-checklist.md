@@ -53,6 +53,9 @@ Why it matters: gross sent may not equal net received, and a transfer can introd
 E4. Verify oracle freshness, confidence, and manipulability.
 Why it matters: price-dependent bugs often combine stale or attacker-influenced inputs with correct-looking business logic.
 
+E5. For PDA-owned vaults or escrows, validate the token-account owner or authority, mint, token program, and stored vault or escrow state as one unit before deposit, withdrawal, release, refund, fee, or close paths.
+Why it matters: a correct PDA address alone does not prove the token account holds the expected asset or is controlled by the expected vault authority.
+
 ## F. Arithmetic and invariants
 
 F1. Verify checked math, rounding direction, and balance-delta accounting.
@@ -68,3 +71,6 @@ Why it matters: rent-thief, reinit, and revival attacks exploit lifecycle assump
 
 G2. Verify same-account alias hazards where the instruction expects distinct accounts.
 Why it matters: duplicate mutable aliasing can silently invalidate deltas and overwrite earlier writes.
+
+G3. For vault or escrow state, test wrong PDA, wrong stored bump, wrong mint, wrong vault token owner, same-account aliases, premature close, and close-then-reinit attempts.
+Why it matters: vault bugs often appear only when PDA, token, lifecycle, and alias assumptions are exercised together rather than one category at a time.

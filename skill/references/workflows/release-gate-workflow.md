@@ -46,6 +46,7 @@ Collect only what the release needs:
 5. critical transaction simulations, compute-unit measurements, and failure cases
 6. account size, rent, realloc, and account-layout diff evidence
 7. rollback plan, prior binary retention, and migration recovery plan when upgrading live state
+8. critical transaction landing evidence: finality target, blockhash expiry policy, bounded confirmation loop, rebroadcast behavior, RPC provider or slot-lag assumptions, and preserved simulation logs
 
 ## Gate Checks
 
@@ -96,6 +97,14 @@ Collect only what the release needs:
 `FAIL` when signoff depends on manual memory, invisible off-chain policy, unavailable signers, missing previous artifacts, or a remediation claim that was not tested.
 
 `SKIP` only for early audit planning where the deliverable is intentionally not a release decision.
+
+### 7. Transaction Landing And RPC Evidence
+
+`PASS` when value-moving, admin, migration, liquidation, claim, close, or emergency transaction paths distinguish forwarding from landing, preserve simulation logs for failed transactions, use an explicit finality target, stop on blockhash expiry, and document rebroadcast or rebuild behavior.
+
+`FAIL` when a release treats `sendTransaction` or a returned signature as success, waits indefinitely for confirmation, retries expired transactions without rebuilding and resigning, hides simulation logs, or depends on a stale or single RPC endpoint without a documented fallback or residual-risk decision.
+
+`SKIP` only when the release has no client, backend signer, relayer, keeper, or operational transaction path in scope.
 
 ## Reviewer Procedure
 
