@@ -104,14 +104,38 @@ if (requireFile(skillPath, "skill/SKILL.md")) {
     "references/workflows/final-audit-report-template.md",
     "skill/SKILL.md links final audit report template workflow",
   );
+  requireIncludes(
+    skill,
+    "references/workflows/release-gate-workflow.md",
+    "skill/SKILL.md links release gate workflow",
+  );
+  requireIncludes(
+    skill,
+    "references/workflows/payment-audit-workflow.md",
+    "skill/SKILL.md links payment audit workflow",
+  );
   requireIncludes(skill.toLowerCase(), "private keys", "skill/SKILL.md keeps private-key safety guardrail");
   requireIncludes(skill.toLowerCase(), "seed phrases", "skill/SKILL.md keeps seed-phrase safety guardrail");
 }
 
 const formalWorkflow = join(repoRoot, "skill", "references", "workflows", "formal-verification-handoff.md");
 const reportWorkflow = join(repoRoot, "skill", "references", "workflows", "final-audit-report-template.md");
+const releaseGateWorkflow = join(repoRoot, "skill", "references", "workflows", "release-gate-workflow.md");
+const paymentAuditWorkflow = join(repoRoot, "skill", "references", "workflows", "payment-audit-workflow.md");
 requireFile(formalWorkflow, "formal-verification-handoff.md");
 requireFile(reportWorkflow, "final-audit-report-template.md");
+if (requireFile(releaseGateWorkflow, "release-gate-workflow.md")) {
+  const content = readText(releaseGateWorkflow);
+  for (const term of ["PASS", "FAIL", "SKIP", "authority", "build", "compute", "migration"]) {
+    requireIncludes(content, term, `release-gate-workflow.md includes ${term}`);
+  }
+}
+if (requireFile(paymentAuditWorkflow, "payment-audit-workflow.md")) {
+  const content = readText(paymentAuditWorkflow);
+  for (const term of ["server-side", "reference", "idempotent", "finality", "Token-2022", "reconciliation"]) {
+    requireIncludes(content, term, `payment-audit-workflow.md includes ${term}`);
+  }
+}
 
 const requiredExamples = [
   "audit-plan-example.md",

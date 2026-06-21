@@ -291,6 +291,8 @@ const requiredReferences = [
   "references/workflows/audit-engagement-workflow.md",
   "references/workflows/finding-writeup-workflow.md",
   "references/workflows/report-to-taxonomy-workflow.md",
+  "references/workflows/release-gate-workflow.md",
+  "references/workflows/payment-audit-workflow.md",
   "references/workflows/formal-verification-handoff.md",
   "references/workflows/final-audit-report-template.md",
   "references/checklists/pre-audit-intake.md",

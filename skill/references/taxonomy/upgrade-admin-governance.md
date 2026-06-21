@@ -12,10 +12,12 @@ description: Canonical Solana vulnerability class for unsafe upgrade authority, 
 - multisig signing hazard
 - admin trust-model gap
 - emergency authority blast radius
+- account migration corruption
+- rollback gap
 
 ## What The Bug Is
 
-This class covers privileged operational controls whose implementation or signing flow gives more power than intended, weakens governance guarantees, or makes safe approval impossible in practice.
+This class covers privileged operational controls whose implementation, signing flow, upgrade path, or live account migration gives more power than intended, weakens governance guarantees, corrupts deployed state, or makes safe approval impossible in practice.
 
 ## Why It Matters On Solana
 
@@ -33,6 +35,22 @@ Upgrade authority and signer coordination are existential controls for many prog
 2. Durable nonce or offline signing flows that are replayable or hard to inspect.
 3. Governance thresholds, quorums, or timelocks that can be bypassed or front-run.
 4. Role changes that do not revoke prior privilege cleanly.
+5. Live account layout changes without an explicit version tag and migration plan.
+6. Realloc or account migration paths that are not idempotent, resumable, or rent-aware.
+7. Upgrades that were not simulated against realistic account data before release.
+8. Missing prior binary, pause, or migration-stop plan for rollback and half-migration recovery.
+
+## Upgrade And Account Migration Lifecycle
+
+Treat program upgrade and account migration as part of the audit surface, not as deployment bookkeeping.
+
+1. Classify account-layout diffs before release. Appending a field is lower risk than reordering, removing, retyping, changing PDA seeds, or changing ownership.
+2. Require an in-data version marker or equivalent state tag for live accounts. A type discriminator proves type, not business-version compatibility.
+3. Require migrations to be idempotent and resumable. Re-running a migration or crank should not double-apply state changes.
+4. Handle mixed versions during the migration window. A half-migrated account set should not brick user exits, claims, or emergency actions.
+5. Prove migrations on safe infrastructure before mainnet. Useful evidence includes fork simulation, byte-diff checks of carried fields, LiteSVM or Mollusk fixtures, and negative tests for already-migrated accounts.
+6. Keep the previous program binary and release evidence. Code rollback is possible only if the prior artifact and authority path are ready; data rollback usually is not.
+7. Add a migration pause or guard when a bad migration could keep touching accounts after a defect is discovered.
 
 ## Anchor Notes
 
@@ -56,6 +74,10 @@ Admin safety is partly a client problem. Blind-signing, replayable durable nonce
 2. Use multisig, timelocks, or staged upgrade processes when appropriate.
 3. Make signer flows inspectable and nonreplayable.
 4. Test quorum, revocation, and threshold edge cases explicitly.
+5. Version live account state before changing layouts.
+6. Prefer additive, forward-compatible migrations; use copy-to-new-account for destructive layout or PDA changes.
+7. Simulate upgrades and migrations against realistic state before mainnet.
+8. Archive the previous binary and rehearse rollback, pause, and half-migration recovery.
 
 ## Public Examples
 

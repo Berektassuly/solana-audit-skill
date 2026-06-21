@@ -1,6 +1,6 @@
 ---
 name: solana-audit
-description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 integrations, digest a public Solana audit report, investigate an exploit path, plan formal verification or invariant testing, or generate audit-readiness, release-blocker, remediation, and final-report workflows.
+description: Use when the user asks to audit a Solana or Anchor codebase, explain report-backed Solana vulnerability classes, review signer or PDA bugs, analyze CPI trust boundaries, assess Token-2022 or payment integrations, digest a public Solana audit report, investigate an exploit path, plan formal verification or invariant testing, or generate audit-readiness, release-gate, remediation, and final-report workflows.
 user-invocable: true
 ---
 
@@ -14,7 +14,8 @@ Use this skill when the user asks for:
 - an Anchor vulnerability review
 - a taxonomy of real Solana vulnerabilities from public reports
 - exploit analysis for PDAs, signer checks, account validation, CPIs, or token integrations
-- audit-readiness planning or release-blocker checklists
+- audit-readiness planning, release-gate verdicts, or release-blocker checklists
+- Solana payment verification, merchant-server, or stablecoin checkout audit workflows
 - formal verification handoff, fuzz/property testing plans, or invariant checklists
 - report digestion and normalization across OtterSec, Zellic, Neodyme, Sec3, Trail of Bits, Immunefi, or official Solana security material
 
@@ -66,6 +67,7 @@ Bucket the request before analyzing details:
 - program boundary checks and account validation
 - CPI and external program trust assumptions
 - token, oracle, or governance integration risk
+- payment, merchant server, or stablecoin settlement boundary
 - client or wallet signing boundary
 - release process and operational controls
 
@@ -143,6 +145,8 @@ Read these references only as needed:
 - Engagement workflow: [references/workflows/audit-engagement-workflow.md](references/workflows/audit-engagement-workflow.md)
 - Finding writeups: [references/workflows/finding-writeup-workflow.md](references/workflows/finding-writeup-workflow.md)
 - Report normalization workflow: [references/workflows/report-to-taxonomy-workflow.md](references/workflows/report-to-taxonomy-workflow.md)
+- Release gate workflow: [references/workflows/release-gate-workflow.md](references/workflows/release-gate-workflow.md) when the user asks for pre-deploy, pre-upgrade, remediation signoff, release readiness, or machine-readable `PASS`/`FAIL`/`SKIP` gates.
+- Payment audit workflow: [references/workflows/payment-audit-workflow.md](references/workflows/payment-audit-workflow.md) when the user asks for Solana Pay, stablecoin checkout, payment verification, merchant-server, webhook, idempotency, or reconciliation review.
 - Formal verification handoff: [references/workflows/formal-verification-handoff.md](references/workflows/formal-verification-handoff.md) when the user asks for invariants, fuzz/property testing, proof handoff, verification planning, LiteSVM, Mollusk, SBF harnesses, QEDGen, Lean, or Kani-style proof work.
 - Final audit report template: [references/workflows/final-audit-report-template.md](references/workflows/final-audit-report-template.md) when the user asks for a final audit report, customer-facing report artifact, remediation summary, or confirmed-versus-residual-risk writeup.
 
