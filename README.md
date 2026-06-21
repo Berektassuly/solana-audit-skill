@@ -11,7 +11,8 @@ This repository packages that audit lifecycle into a compact Agent Skill. It hel
 - classify Solana and Anchor attack surface before reviewing details
 - map observations to report-backed vulnerability classes
 - write findings with evidence, impact, fix, and verification
-- generate audit-readiness, release-blocker, remediation, and final-report workflows
+- generate audit-readiness, release-blocker, remediation, formal verification handoff, and final-report workflows
+- produce final audit report artifacts from confirmed findings, resolved hypotheses, and residual risk
 - digest public Solana audit reports into a normalized taxonomy
 
 ## Why This Is Not Just Another Checklist
@@ -26,6 +27,8 @@ The result is token-efficient progressive disclosure: an agent can start with th
 - Separates exploitability from hardening, residual governance risk, wallet/client risk, and operational risk.
 - Covers Solana-specific classes such as PDA seed and bump mistakes, CPI trust boundaries, duplicate mutable aliasing, lifecycle revival, Token-2022 transfer hooks, durable nonce governance abuse, and Token-2022 confidential-transfer proof assumptions.
 - Enforces a claim discipline: findings should cite public analogs or local evidence, explain impact, propose a fix, and include verification.
+- Adds a formal verification handoff workflow for LiteSVM property tests, Mollusk or SBF-focused harnesses, and proof-oriented handoff without overclaiming verification results.
+- Adds a final audit report template that separates confirmed findings, resolved hypotheses, residual risk, remediation status, and limitations.
 
 ## Repository Structure
 
@@ -37,6 +40,10 @@ solana-audit-skill/
 |-- install.sh
 |-- commands/
 |   `-- audit-solana.md
+|-- examples/
+|   |-- audit-plan-example.md
+|   |-- finding-writeup-example.md
+|   `-- final-report-example.md
 |-- skill/
 |   |-- SKILL.md
 |   `-- references/
@@ -50,6 +57,7 @@ solana-audit-skill/
 |       |-- agents/
 |       `-- references/
 `-- tests/
+    |-- golden-validation.ts
     |-- package.json
     |-- run.ts
     `-- static-validation.ts
@@ -125,6 +133,8 @@ The Solana AI Kit skill hub should route Solana audit lifecycle requests to:
 
 Useful routing triggers include audit, security review, exploit analysis, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, public audit report digestion, remediation verification, release blockers, and final report generation.
 
+For this bounty submission, add these triggers when wiring the Solana AI Kit hub: Solana audit, Anchor audit, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, formal verification handoff, audit report generation, release blockers, remediation verification, incident-to-audit taxonomy mapping.
+
 For non-Claude or Codex-style setups that use `.agents`:
 
 ```bash
@@ -160,6 +170,7 @@ Audit this Anchor instruction for signer and PDA bugs.
 Review this Solana program for CPI trust-boundary issues.
 Generate a release blocker checklist for this Token-2022 integration.
 Digest this public audit report and map the findings to the taxonomy.
+Plan a formal verification handoff for these vault invariants.
 Write a remediation verification plan for these Solana findings.
 Create a final audit report from these confirmed findings.
 ```
@@ -174,13 +185,23 @@ In command-aware agent setups, expose it as `/audit-solana` and have it route to
 
 ## Additional Skill: Solana Incident Response
 
-This repo also includes:
+This repo also includes a supplemental package:
 
 ```text
 skills/solana-incident-response/SKILL.md
 ```
 
-Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow.
+Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow. The canonical bounty skill remains `skill/SKILL.md`; `skills/solana-incident-response` is supplemental.
+
+## Examples
+
+The `examples/` directory contains prompt-to-artifact contracts for:
+
+- `examples/audit-plan-example.md`: taxonomy-first pre-mainnet audit planning.
+- `examples/finding-writeup-example.md`: single finding draft with evidence, impact, fix, verification, severity, and false-positive conditions.
+- `examples/final-report-example.md`: compact final audit report aligned to the final audit report template.
+
+These examples are intentionally short and testable. They show how agents should route from `skill/SKILL.md` into the focused workflow and taxonomy references rather than copying large reference sections into commands.
 
 ## Evidence and References
 
@@ -202,7 +223,7 @@ See [`skill/references/resources.md`](skill/references/resources.md) for the sou
 
 ## Tests and Validation
 
-Default validation does not require any paid API key:
+Default validation requires no external credentials and does not require any paid API key:
 
 ```bash
 cd tests
@@ -217,7 +238,7 @@ cd tests
 npm.cmd test
 ```
 
-`npm test` runs `tests/static-validation.ts`, which checks skill frontmatter, packaged local links, required references, the installer smoke path, command files, README coverage, Skills CLI documentation, and placeholder hygiene.
+`npm test` runs `tests/static-validation.ts` and the no-credential golden validation in `tests/golden-validation.ts`. Static validation checks skill frontmatter, packaged local links, required references, the installer smoke path, command files, README coverage, Skills CLI documentation, and placeholder hygiene. Golden validation checks the new workflow links, prompt-to-artifact examples, required headings, output-contract terms, safety constraints, and README coverage.
 
 ### Optional Model-Backed Evaluator
 
@@ -229,17 +250,17 @@ npm run test:anthropic
 npm run test:anthropic:verbose
 ```
 
-Set `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` before running the optional evaluator. It checks trigger matching and audit-plan behavior against live model responses.
+Set `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` before running the optional evaluator. It checks trigger matching and audit-plan behavior against live model responses. Do not run this optional evaluator as part of default validation unless those credentials are already available.
 
 ## Bounty Fit
 
 Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips.
 
-Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline.
+Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline, formal verification handoff, and final report generation.
 
-Quality: uses progressive disclosure, static validation, optional model-backed evaluation, safe installer behavior, MIT-compatible content, and no required paid API access for default tests.
+Quality: uses progressive disclosure, static validation, no-credential golden tests, optional model-backed evaluation, safe installer behavior, MIT-compatible content, and no required paid API access for default tests.
 
-Fit with Solana AI Kit: preserves the `skill/` layout used by Solana ecosystem skills, documents `.claude/skills/ext/solana-audit` routing, includes an `.agents` equivalent, and adds a command file suitable for command-aware AI Kit setups.
+Fit with Solana AI Kit: preserves the `skill/` layout used by Solana ecosystem skills, documents `.claude/skills/ext/solana-audit` routing, includes an `.agents` equivalent, adds a command file suitable for command-aware AI Kit setups, and keeps detailed taxonomy and workflow material under `skill/references/`.
 
 ## Maintaining the Taxonomy
 

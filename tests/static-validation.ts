@@ -291,6 +291,8 @@ const requiredReferences = [
   "references/workflows/audit-engagement-workflow.md",
   "references/workflows/finding-writeup-workflow.md",
   "references/workflows/report-to-taxonomy-workflow.md",
+  "references/workflows/formal-verification-handoff.md",
+  "references/workflows/final-audit-report-template.md",
   "references/checklists/pre-audit-intake.md",
   "references/checklists/program-review-checklist.md",
   "references/checklists/client-review-checklist.md",
@@ -384,6 +386,10 @@ if (existsSync(readmePath)) {
   check(readme.includes("bounty fit"), "README maps bounty fit");
   check(readme.includes("skills cli compatibility"), "README documents Skills CLI compatibility");
   check(readme.includes("optional model-backed evaluator"), "README documents the optional model-backed evaluator");
+  check(readme.includes("formal verification handoff"), "README documents formal verification handoff");
+  check(readme.includes("final audit report template"), "README documents final audit report template");
+  check(readme.includes("examples/"), "README documents prompt-to-artifact examples");
+  check(readme.includes("no-credential golden"), "README documents no-credential golden tests");
   check(readme.includes("npm.cmd test"), "README documents npm.cmd test for Windows PowerShell");
   check(readme.includes("/mnt/c/") && readme.includes("c:/users/"), "README documents Windows-friendly install.sh path forms");
   check(readme.includes("npx skills add berektassuly/solana-audit-skill --skill solana-audit"), "README includes Skills CLI add command");
