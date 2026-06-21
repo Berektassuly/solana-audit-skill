@@ -2,13 +2,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "tsx static-validation.ts && tsx golden-validation.ts",
+    "test": "tsx static-validation.ts && tsx golden-validation.ts && tsx behavioral-golden.ts",
     "test:anthropic": "tsx run.ts",
     "test:anthropic:verbose": "tsx run.ts --verbose",
     "eval": "tsx run.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.105.0",
     "tsx": "^4.22.4"
+  },
+  "optionalDependencies": {
+    "@anthropic-ai/sdk": "^0.105.0"
   }
 }

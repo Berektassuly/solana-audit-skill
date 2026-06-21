@@ -14,7 +14,6 @@
  *   npx tsx run.ts trigger --case 3
  */
 
-import Anthropic from "@anthropic-ai/sdk";
 import { readFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -119,7 +118,7 @@ function validateCaseIndex(caseIdx: number, suiteFilter: string | undefined) {
 }
 
 async function runSuite(
-  client: Anthropic,
+  client: any,
   suiteName: string,
   systemPrompt: string,
   cases: TestCase[],
@@ -315,6 +314,14 @@ async function main() {
 
   if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN) {
     console.error("Missing Anthropic credentials. Set ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN before running the evaluator suites.");
+    process.exit(1);
+  }
+
+  let Anthropic;
+  try {
+    ({ default: Anthropic } = await import("@anthropic-ai/sdk"));
+  } catch {
+    console.error("Missing optional Anthropic SDK. Run npm install without --omit=optional before running the optional evaluator suites.");
     process.exit(1);
   }
 
