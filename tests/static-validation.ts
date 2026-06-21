@@ -8,6 +8,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 const skillDir = join(repoRoot, "skill");
 const skillPath = join(skillDir, "SKILL.md");
+const incidentSkillDir = join(repoRoot, "skills", "solana-incident-response");
+const incidentSkillPath = join(incidentSkillDir, "SKILL.md");
 const readmePath = join(repoRoot, "README.md");
 
 let failures = 0;
@@ -147,6 +149,54 @@ for (const ref of requiredReferences) {
   check(existsSync(join(skillDir, ref)), `required reference exists: ${ref}`);
 }
 
+check(existsSync(incidentSkillPath), "skills/solana-incident-response/SKILL.md exists");
+if (existsSync(incidentSkillPath)) {
+  const incidentSkill = readText(incidentSkillPath);
+  const frontmatter = parseFrontmatter(incidentSkill, "skills/solana-incident-response/SKILL.md");
+
+  if (frontmatter) {
+    const allowed = new Set(["name", "description"]);
+    const keys = [...frontmatter.keys()];
+    check(keys.every((key) => allowed.has(key)), "incident-response skill frontmatter uses only portable fields");
+    check(frontmatter.get("name") === "solana-incident-response", "incident-response skill name is solana-incident-response");
+
+    const description = frontmatter.get("description") ?? "";
+    const triggerTerms = ["solana", "incident", "triage", "transaction", "timeline", "blast", "evidence", "containment"];
+    const matches = triggerTerms.filter((term) => description.toLowerCase().includes(term)).length;
+    check(matches >= 6, "incident-response skill description is specific to Solana incident work");
+  }
+}
+
+const incidentRequiredReferences = [
+  "references/evidence-preservation.md",
+  "references/triage-workflow.md",
+  "references/source-map.md",
+  "references/report-template.md",
+  "agents/openai.yaml",
+];
+
+for (const ref of incidentRequiredReferences) {
+  check(existsSync(join(incidentSkillDir, ref)), `incident-response reference exists: ${ref}`);
+}
+
+if (existsSync(incidentSkillDir)) {
+  for (const file of walkFiles(incidentSkillDir)) {
+    if (extname(file) !== ".md") continue;
+    const content = readText(file);
+    for (const link of localMarkdownLinks(content)) {
+      const targetPath = resolve(dirname(file), decodeURIComponent(link));
+      check(existsSync(targetPath), `${relative(repoRoot, file)} local link resolves: ${link}`);
+    }
+  }
+
+  const openaiYamlPath = join(incidentSkillDir, "agents", "openai.yaml");
+  if (existsSync(openaiYamlPath)) {
+    const openaiYaml = readText(openaiYamlPath);
+    check(openaiYaml.includes("$solana-incident-response"), "incident-response default prompt names the skill");
+    check(openaiYaml.includes("Triage Solana exploits and evidence"), "incident-response UI metadata is specific");
+  }
+}
+
 check(existsSync(readmePath), "README.md exists");
 if (existsSync(readmePath)) {
   const readme = readText(readmePath).toLowerCase();
@@ -158,6 +208,7 @@ if (existsSync(readmePath)) {
   check(readme.includes("optional model-backed evaluator"), "README documents the optional model-backed evaluator");
   check(readme.includes("npx skills add berektassuly/solana-audit-skill --skill solana-audit"), "README includes Skills CLI add command");
   check(readme.includes(".claude/skills/ext/solana-audit/skill/skill.md"), "README includes AI Kit skill route");
+  check(readme.includes("solana-incident-response"), "README documents the incident-response skill");
 }
 
 const installPath = join(repoRoot, "install.sh");
@@ -188,7 +239,7 @@ if (existsSync(rootShimPath)) {
   pass("no root SKILL.md shim is present");
 }
 
-const scanExtensions = new Set([".md", ".sh", ".json"]);
+const scanExtensions = new Set([".md", ".sh", ".json", ".yaml", ".yml"]);
 const placeholderPattern = /\b(TODO|TBD|FIXME|CHANGEME|YOUR_ORG|YOUR_REPO)\b|lorem ipsum|\[insert/iu;
 for (const file of walkFiles(repoRoot)) {
   if (!scanExtensions.has(extname(file))) continue;

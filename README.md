@@ -44,6 +44,11 @@ solana-audit-skill/
 |       |-- reports/
 |       |-- taxonomy/
 |       `-- workflows/
+|-- skills/
+|   `-- solana-incident-response/
+|       |-- SKILL.md
+|       |-- agents/
+|       `-- references/
 `-- tests/
     |-- package.json
     |-- run.ts
@@ -95,6 +100,8 @@ bash install.sh ~/.agents/skills/solana-audit
 
 Windows users who do not use WSL or Git Bash should prefer the Skills CLI or manually copy `skill/` to the desired skill directory.
 
+The bash installer remains scoped to the canonical `solana-audit` package under `skill/`.
+
 ## Solana AI Kit Integration
 
 Add this repository as an external skill submodule:
@@ -135,7 +142,7 @@ npx.cmd skills use . --skill solana-audit
 npx.cmd skills add Berektassuly/solana-audit-skill --list
 ```
 
-All three commands found `solana-audit`. A `skills.sh.json` catalog file was not added because this is a one-skill repository and does not need grouping metadata.
+All three commands found `solana-audit`. Supplemental skills live under `skills/<skill-name>/SKILL.md`; this preserves the canonical audit entry point while allowing focused adjacent workflows.
 
 ## Usage
 
@@ -157,6 +164,16 @@ commands/audit-solana.md
 ```
 
 In command-aware agent setups, expose it as `/audit-solana` and have it route to `skill/SKILL.md`.
+
+## Additional Skill: Solana Incident Response
+
+This repo also includes:
+
+```text
+skills/solana-incident-response/SKILL.md
+```
+
+Use `solana-incident-response` for active or recent Solana incidents: suspicious transaction triage, transaction timeline reconstruction, evidence preservation, blast-radius classification, containment planning, and post-mortem drafting. It links back to the audit taxonomy when exploit classification is needed, but keeps incident operations in a separate workflow.
 
 ## Evidence and References
 

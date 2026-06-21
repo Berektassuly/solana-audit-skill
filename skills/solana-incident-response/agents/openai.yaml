@@ -1,0 +1,4 @@
+interface:
+  display_name: "Solana Incident Response"
+  short_description: "Triage Solana exploits and evidence"
+  default_prompt: "Use $solana-incident-response to triage this Solana incident, reconstruct the transaction timeline, and produce a safe evidence-backed response plan."
