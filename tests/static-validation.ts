@@ -391,6 +391,11 @@ if (existsSync(readmePath)) {
   check(readme.includes("bounty fit"), "README maps bounty fit");
   check(readme.includes("skills cli compatibility"), "README documents Skills CLI compatibility");
   check(readme.includes("optional model-backed evaluator"), "README documents the optional model-backed evaluator");
+  check(readme.includes("pre-audit design review"), "README documents pre-audit design review");
+  check(readme.includes("release-gate"), "README documents release-gate workflow");
+  check(readme.includes("payment-audit"), "README documents payment-audit workflow");
+  check(readme.includes("transaction safety workflow"), "README documents transaction safety workflow");
+  check(readme.includes("token-2022 policy"), "README documents Token-2022 policy workflow");
   check(readme.includes("formal verification handoff"), "README documents formal verification handoff");
   check(readme.includes("final audit report template"), "README documents final audit report template");
   check(readme.includes("examples/"), "README documents prompt-to-artifact examples");

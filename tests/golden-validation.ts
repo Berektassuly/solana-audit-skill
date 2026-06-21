@@ -290,6 +290,11 @@ if (existsSync(finalReport)) {
 if (requireFile(readmePath, "README.md")) {
   const readme = readText(readmePath).toLowerCase();
   for (const phrase of [
+    "pre-audit design review",
+    "release-gate",
+    "payment-audit",
+    "transaction safety workflow",
+    "token-2022 policy",
     "formal verification handoff",
     "final audit report template",
     "examples/",

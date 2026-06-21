@@ -1,8 +1,8 @@
 # Solana Audit Skill
 
-From public Solana failures to audit-ready findings: solana-audit turns real report-backed vulnerability patterns into a progressive skill for attack-surface mapping, severity triage, finding writeups, remediation verification, formal-verification handoff, and final audit reports.
+From public Solana failures to audit-ready findings: solana-audit turns real report-backed vulnerability patterns into progressive audit workflows for attack-surface mapping, pre-audit design review, transaction signing boundaries, Token-2022 policy, payment verification, release gates, severity triage, finding writeups, remediation verification, formal-verification handoff, and final audit reports.
 
-An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit-path analysis, remediation verification, and report-driven vulnerability taxonomy work.
+An evidence-backed Agent Skill for Solana security reviews, audit planning, exploit-path analysis, transaction and payment boundary review, remediation verification, release-readiness review, and report-driven vulnerability taxonomy work.
 
 In 60 seconds, a judge should see the prompt, the references loaded, the output contract, and one compact finding with Evidence, Impact, Fix, and Verification. This repo keeps that path short while preserving the deeper taxonomy under `skill/references/`.
 
@@ -17,7 +17,8 @@ This repository packages that audit lifecycle into a compact Agent Skill. It hel
 - classify Solana and Anchor attack surface before reviewing details
 - map observations to report-backed vulnerability classes
 - write findings with evidence, impact, fix, and verification
-- generate audit-readiness, release-blocker, remediation, formal verification handoff, and final-report workflows
+- generate audit-readiness, pre-audit design review, release-gate, transaction-safety, payment-audit, Token-2022 policy, remediation, formal verification handoff, and final-report workflows
+- review client signing, backend signer, concrete transaction, payment verification, and release-readiness boundaries without signing or sending transactions
 - produce final audit report artifacts from confirmed findings, resolved hypotheses, and residual risk
 - digest public Solana audit reports into a normalized taxonomy
 
@@ -35,6 +36,8 @@ The novelty is the lifecycle plus evidence discipline: a normalized public-repor
 - Separates exploitability from hardening, residual governance risk, wallet/client risk, and operational risk.
 - Covers Solana-specific classes such as PDA seed and bump mistakes, CPI trust boundaries, duplicate mutable aliasing, lifecycle revival, Token-2022 transfer hooks, durable nonce governance abuse, and Token-2022 confidential-transfer proof assumptions.
 - Enforces a claim discipline: findings should cite public analogs or local evidence, explain impact, propose a fix, and include verification.
+- Adds audit workflows for pre-audit design review, concrete transaction safety review, Solana payment verification, Token-2022 support policy, and machine-readable release gates.
+- Keeps operational and client-side risk visible without turning the skill into a wallet, scanner, deployment, payment, or token-creation tool.
 - Adds a formal verification handoff workflow for LiteSVM property tests, Mollusk or SBF-focused harnesses, and proof-oriented handoff without overclaiming verification results.
 - Adds a final audit report template that separates confirmed findings, resolved hypotheses, residual risk, remediation status, and limitations.
 
@@ -183,9 +186,9 @@ The Solana AI Kit skill hub should route Solana audit lifecycle requests to:
 .claude/skills/ext/solana-audit/skill/SKILL.md
 ```
 
-Useful routing triggers include audit, security review, exploit analysis, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, public audit report digestion, remediation verification, release blockers, and final report generation.
+Useful routing triggers include audit, security review, exploit analysis, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, Token-2022 policy, Solana payment verification, decoded transaction review, pre-sign transaction safety, backend signer policy, pre-audit design review, public audit report digestion, remediation verification, release gates, release blockers, and final report generation.
 
-For this bounty submission, add these triggers when wiring the Solana AI Kit hub: Solana audit, Anchor audit, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, formal verification handoff, audit report generation, release blockers, remediation verification, incident-to-audit taxonomy mapping.
+For this bounty submission, add these triggers when wiring the Solana AI Kit hub: Solana audit, Anchor audit, signer bugs, PDA bugs, CPI trust boundaries, Token-2022 integration risk, Token-2022 policy workflow, payment audit workflow, transaction safety workflow, pre-audit design review, formal verification handoff, audit report generation, release gates, release blockers, remediation verification, incident-to-audit taxonomy mapping.
 
 For non-Claude or Codex-style setups that use `.agents`:
 
@@ -220,7 +223,12 @@ After installation, ask your agent for work such as:
 ```text
 Audit this Anchor instruction for signer and PDA bugs.
 Review this Solana program for CPI trust-boundary issues.
+Run a pre-audit design review for this Anchor vault before implementation is frozen.
 Generate a release blocker checklist for this Token-2022 integration.
+Create a Token-2022 support policy for accepted collateral mints.
+Review this decoded transaction before an agent or backend signer signs it.
+Audit this Solana Pay checkout flow for server-side verification and replay risk.
+Produce a release-gate verdict for this pre-mainnet upgrade.
 Digest this public audit report and map the findings to the taxonomy.
 Plan a formal verification handoff for these vault invariants.
 Write a remediation verification plan for these Solana findings.
@@ -275,7 +283,7 @@ See [`skill/references/resources.md`](skill/references/resources.md) for the sou
 
 ### Source Freshness
 
-This source index was refreshed against public Solana AI Kit bounty research and current Solana security material on 2026-06-21. The corpus and workflows cover current Solana concerns such as Token-2022 extension assumptions, transfer hooks, durable nonce governance risk, ZK proof soundness, upgrade migration risk, LiteSVM, Mollusk, and SBF-focused harness planning. These references support audit planning and finding writeups; they do not certify any target protocol as secure.
+This source index was refreshed against public Solana AI Kit bounty research and current Solana security material on 2026-06-21. The corpus and workflows cover current Solana concerns such as Token-2022 extension assumptions, transfer hooks, concrete transaction review, payment verification, durable nonce governance risk, ZK proof soundness, upgrade migration risk, release gates, LiteSVM, Mollusk, and SBF-focused harness planning. These references support audit planning and finding writeups; they do not certify any target protocol as secure.
 
 ## Tests and Validation
 
@@ -310,15 +318,15 @@ Set `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` before running the optional ev
 
 ## Bounty Fit
 
-Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips. Builders can move from scope and attack surface to evidence, exploit path, severity, fix, verification, and customer-facing report artifacts without treating every suspicion as a reproduced exploit.
+Usefulness: gives Solana builders and auditors an end-to-end audit lifecycle skill, not only scattered security tips. Builders can move from scope and attack surface to design assumptions, transaction and payment boundary review, release-gate evidence, exploit path, severity, fix, verification, and customer-facing report artifacts without treating every suspicion as a reproduced exploit.
 
-Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline, hypothesis versus confirmed-finding labels, residual-risk handling, formal verification handoff, and final report generation.
+Novelty: normalizes repeated public Solana findings into a report-backed taxonomy with explicit claim and verification discipline, hypothesis versus confirmed-finding labels, residual-risk handling, pre-audit design review, transaction safety review, Token-2022 support policy, formal verification handoff, and final report generation.
 
 Quality: uses progressive disclosure, static validation, no-credential golden tests, optional model-backed evaluation, safe installer behavior, MIT-compatible content, and no required paid API access for default tests.
 
 Fit with Solana AI Kit: preserves the `skill/` layout used by Solana ecosystem skills, documents `.claude/skills/ext/solana-audit` routing, includes an `.agents` equivalent, adds a command file suitable for command-aware AI Kit setups, and keeps detailed taxonomy and workflow material under `skill/references/`.
 
-Competitive differentiation: Transaction reliability, Token-2022, program-upgrade, and diagnostics skills are useful narrow tools. solana-audit is the cross-cutting audit layer that can evaluate those surfaces as part of one evidence-backed review and produce the artifacts teams actually need before launch or remediation signoff.
+Competitive differentiation: Transaction reliability, Token-2022, program-upgrade, diagnostics, and payment skills are useful narrow tools. solana-audit is the cross-cutting audit layer that evaluates those surfaces as evidence, residual risk, release blockers, and report-ready findings before launch or remediation signoff.
 
 ## Maintaining the Taxonomy
 
